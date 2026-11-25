@@ -1,10 +1,15 @@
 import * as THREE from 'three';
-import { MobiusFlightPath } from '../MobiusFlightPath';
+import {
+  RiemannRoamPath,
+  ROAM_RADIUS_INNER,
+  ROAM_RADIUS_OUTER,
+} from '../RiemannRoamPath';
 
 /** 威慑半径：玩家进入后巨兽减速并转头俯视 */
 const DETER_RADIUS = 720;
 const SERP_AMP = 60;
 const SWELL_AMP = 170;
+const EDGE_TAPER = 220;
 const FORWARD_Y = new THREE.Vector3(0, 1, 0);
 
 /**
@@ -12,7 +17,7 @@ const FORWARD_Y = new THREE.Vector3(0, 1, 0);
  * 变速冲刺与对玩家的威慑姿态。所有临时量实例级复用，零逐帧分配。
  */
 export class LeviathanPilot {
-  private readonly path = new MobiusFlightPath();
+  private readonly path = new RiemannRoamPath();
   private pathTime = 0;
   private deterWeight = 0;
 
@@ -51,16 +56,24 @@ export class LeviathanPilot {
     this.axisZ.set(0, 0, 1).applyQuaternion(this.baseQuat);
     const a = elapsed * 0.5;
     const b = elapsed * 0.83 + 2.1;
+    // 临近内外环折返点时收束摆幅，避免蛇形偏移把半径顶出规定范围
+    const radial = Math.hypot(this.basePos.x, this.basePos.z);
+    const edge = Math.min(
+      radial - ROAM_RADIUS_INNER,
+      ROAM_RADIUS_OUTER - radial,
+    );
+    const taper = THREE.MathUtils.smoothstep(edge, 0, EDGE_TAPER);
     this.lateral
       .copy(this.axisX)
-      .multiplyScalar(Math.sin(a) * SERP_AMP)
-      .addScaledVector(this.axisZ, Math.sin(b) * SERP_AMP * 0.6);
+      .multiplyScalar(Math.sin(a) * SERP_AMP * taper)
+      .addScaledVector(this.axisZ, Math.sin(b) * SERP_AMP * 0.6 * taper);
 
     // 俯冲/爬升：低频起伏包络
     const swell =
       Math.sin(elapsed * 0.09 + 1.3) *
       SWELL_AMP *
-      (0.55 + 0.45 * Math.sin(elapsed * 0.041));
+      (0.55 + 0.45 * Math.sin(elapsed * 0.041)) *
+      taper;
 
     outPosition.copy(this.basePos).add(this.lateral);
     outPosition.y += swell;

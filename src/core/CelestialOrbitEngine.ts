@@ -1,7 +1,18 @@
 import * as THREE from 'three';
 
 const TAU = Math.PI * 2;
-const DEG = Math.PI / 180;
+
+/** 确定性种子随机源：工厂与实体重生共用，避免两套 PRNG 序列 */
+export function createSeededRandom(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
 export type OrbitLayer = 'inner' | 'main' | 'outer';
 
@@ -25,10 +36,9 @@ interface LayerSpec {
   aMax: number;
   eMin: number;
   eMax: number;
-  iMin: number;
-  iMax: number;
   periodMin: number;
   periodMax: number;
+  seedBase: number;
 }
 
 // 内环朝圣 / 中环洋流 / 外环深空（统一 500/1180/2350 口径）
@@ -36,22 +46,26 @@ const LAYERS: Record<OrbitLayer, LayerSpec> = {
   inner: {
     aMin: 500, aMax: 1150,
     eMin: 0.05, eMax: 0.18,
-    iMin: -22, iMax: 22,
     periodMin: 40, periodMax: 70,
+    seedBase: 0,
   },
   main: {
     aMin: 1180, aMax: 2300,
     eMin: 0.15, eMax: 0.35,
-    iMin: -60, iMax: 60,
     periodMin: 90, periodMax: 180,
+    seedBase: 1009,
   },
   outer: {
     aMin: 2350, aMax: 3400,
     eMin: 0.45, eMax: 0.75,
-    iMin: -80, iMax: 80,
     periodMin: 240, periodMax: 420,
+    seedBase: 2017,
   },
 };
+
+// 黄金比例/根号二小数序列：小样本也能均匀铺开球面方向与初始相位
+const GOLDEN_FRACTION = 0.6180339887498949;
+const IRRATIONAL_STEP = 0.7548776662466927;
 
 const Y_AXIS = new THREE.Vector3(0, 1, 0);
 const X_AXIS = new THREE.Vector3(1, 0, 0);
@@ -68,20 +82,23 @@ export function createOrbitalElements(
 ): OrbitalElements {
   const spec = LAYERS[layer];
   const period = spec.periodMin + rnd() * (spec.periodMax - spec.periodMin);
-  const inclination = (spec.iMin + rnd() * (spec.iMax - spec.iMin)) * DEG;
+  // 球面均匀方向：法向 Y 分量按 2u-1 分层，升交点用无理数序列错开
+  const inclinationPhase = (index * GOLDEN_FRACTION + rnd() * 0.055) % 1;
+  const inclination = Math.acos(inclinationPhase * 2 - 1);
+  const node = ((index * IRRATIONAL_STEP + rnd() * 0.09) % 1) * TAU;
   return {
     layer,
     semiMajor: spec.aMin + rnd() * (spec.aMax - spec.aMin),
     eccentricity: spec.eMin + rnd() * (spec.eMax - spec.eMin),
-    inclination: rnd() < 0.5 ? -inclination : inclination,
-    node: rnd() * TAU,
+    inclination,
+    node,
     argPeri: rnd() * TAU,
     meanAnomaly0: rnd() * TAU,
     meanMotion: TAU / period,
     // 长期进动：让轨道在数百秒后交织成花瓣状，而非机械闭合椭圆
     nodeRate: (rnd() - 0.5) * 0.01,
     periRate: (rnd() - 0.5) * 0.008,
-    seed: index * 1.618034 + rnd() * 97.0,
+    seed: spec.seedBase + index * 1.618034 + rnd() * 97.0,
     driftScale: 0.55 + rnd() * 0.45,
   };
 }

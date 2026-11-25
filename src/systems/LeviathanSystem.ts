@@ -1,7 +1,7 @@
 import type { WorldContext } from '../app/WorldContext';
 import type { CosmosSystem } from '../core/SystemRunner';
 
-/** 巨兽莫比乌斯巡游、皇冠搏动与共享材质 uniform */
+/** 巨兽内外环游龙巡游、皇冠搏动与共享材质 uniform */
 export class LeviathanSystem implements CosmosSystem {
   readonly name = 'leviathan';
 

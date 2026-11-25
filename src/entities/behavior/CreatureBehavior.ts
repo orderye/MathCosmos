@@ -11,8 +11,10 @@ const REACT_SMOOTH_WIDTH = 90;
  * 不触碰几何、LOD 与音频，轨道骨架仍由 CelestialOrbitEngine 提供。
  */
 export class CreatureBehavior {
-  readonly profile: BehaviorProfile;
+  profile: BehaviorProfile;
 
+  private readonly modelType: string;
+  private readonly category: MathCategory;
   private clock = 0;
   private reactWeight = 0;
   private readonly wanderOffset = new THREE.Vector3();
@@ -20,7 +22,19 @@ export class CreatureBehavior {
   private readonly toPlayer = new THREE.Vector3();
 
   constructor(modelType: string, category: MathCategory, seed: number) {
+    this.modelType = modelType;
+    this.category = category;
     this.profile = createBehaviorProfile(category, modelType, seed);
+  }
+
+  /** 重生时换一个行为种子，让新实体拥有新的轨迹与性格 */
+  reset(seed: number): void {
+    this.profile = createBehaviorProfile(this.category, this.modelType, seed);
+    this.clock = 0;
+    this.reactWeight = 0;
+    this.wanderOffset.set(0, 0, 0);
+    this.reactOffset.set(0, 0, 0);
+    this.toPlayer.set(0, 0, 0);
   }
 
   /** 行为时钟：个体轨道解算时间，携带各自的速度调制 */
@@ -48,6 +62,7 @@ export class CreatureBehavior {
     tangent: THREE.Vector3,
     playerPos: THREE.Vector3,
     delta: number,
+    offsetScale = 1,
   ): void {
     const p = this.profile;
 
@@ -58,7 +73,7 @@ export class CreatureBehavior {
         Math.sin(t * 1.37 + 1.7) * 0.55,
         Math.cos(t * 0.83 + 3.1),
       )
-      .multiplyScalar(p.wanderAmp);
+      .multiplyScalar(p.wanderAmp * offsetScale);
     position.add(this.wanderOffset);
 
     let targetWeight = 0;
@@ -78,9 +93,11 @@ export class CreatureBehavior {
         this.toPlayer.multiplyScalar(1 / dist);
         this.reactOffset
           .copy(this.toPlayer)
-          .multiplyScalar(sign * p.reactStrength * this.reactWeight);
+          .multiplyScalar(sign * p.reactStrength * this.reactWeight * offsetScale);
         position.add(this.reactOffset);
-        tangent.addScaledVector(this.toPlayer, sign * 0.9 * this.reactWeight).normalize();
+        tangent
+          .addScaledVector(this.toPlayer, sign * 0.9 * this.reactWeight * offsetScale)
+          .normalize();
       }
     }
   }

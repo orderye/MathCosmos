@@ -63,7 +63,7 @@ export class VoicePool {
   ): void {
     this.activeIds.clear();
     for (const c of creatures) {
-      if (!c.ready) continue;
+      if (!c.alive) continue;
       this.tmpEntity.copy(c.group.position).add(universeRoot.position);
       const dist = this.tmpEntity.distanceTo(playerPos);
       if (dist > 170) continue;

@@ -9,7 +9,7 @@ export const HIGH_DIM_MODELS: CodexEntry[] = [
     category: 'high-dim',
     pipeline: 'projection_4d',
     shell: 'main',
-    instanceCount: 4,
+    instanceCount: 3,
     scaleRange: [45, 60],
     audioFamily: 'high-dim',
     latexFormula:
@@ -28,7 +28,7 @@ export const HIGH_DIM_MODELS: CodexEntry[] = [
     category: 'high-dim',
     pipeline: 'projection_4d',
     shell: 'main',
-    instanceCount: 1,
+    instanceCount: 3,
     scaleRange: [35, 52],
     audioFamily: 'high-dim',
     latexFormula:
@@ -48,7 +48,7 @@ export const HIGH_DIM_MODELS: CodexEntry[] = [
     category: 'high-dim',
     pipeline: 'projection_4d',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [34, 48],
     audioFamily: 'high-dim',
     latexFormula:
@@ -68,7 +68,7 @@ export const HIGH_DIM_MODELS: CodexEntry[] = [
     category: 'high-dim',
     pipeline: 'tube_network',
     shell: 'outer',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [38, 54],
     audioFamily: 'high-dim',
     latexFormula:
@@ -87,7 +87,7 @@ export const HIGH_DIM_MODELS: CodexEntry[] = [
     category: 'high-dim',
     pipeline: 'projection_hd',
     shell: 'inner',
-    instanceCount: 1,
+    instanceCount: 3,
     scaleRange: [38, 56],
     audioFamily: 'high-dim',
     latexFormula:
@@ -106,7 +106,7 @@ export const HIGH_DIM_MODELS: CodexEntry[] = [
     category: 'high-dim',
     pipeline: 'instanced_lattice',
     shell: 'outer',
-    instanceCount: 1,
+    instanceCount: 3,
     scaleRange: [34, 50],
     audioFamily: 'high-dim',
     latexFormula:

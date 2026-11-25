@@ -9,7 +9,7 @@ export const CHAOS_MODELS: CodexEntry[] = [
     category: 'chaos',
     pipeline: 'chaos_particles',
     shell: 'main',
-    instanceCount: 6,
+    instanceCount: 3,
     scaleRange: [28, 40],
     audioFamily: 'chaos',
     latexFormula:
@@ -28,7 +28,7 @@ export const CHAOS_MODELS: CodexEntry[] = [
     category: 'chaos',
     pipeline: 'chaos_particles',
     shell: 'main',
-    instanceCount: 5,
+    instanceCount: 3,
     scaleRange: [24, 35],
     audioFamily: 'chaos',
     latexFormula:
@@ -47,7 +47,7 @@ export const CHAOS_MODELS: CodexEntry[] = [
     category: 'chaos',
     pipeline: 'chaos_particles',
     shell: 'main',
-    instanceCount: 5,
+    instanceCount: 3,
     scaleRange: [22, 32],
     audioFamily: 'chaos',
     latexFormula:
@@ -66,7 +66,7 @@ export const CHAOS_MODELS: CodexEntry[] = [
     category: 'chaos',
     pipeline: 'chaos_particles',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [32, 45],
     audioFamily: 'chaos',
     latexFormula:
@@ -85,7 +85,7 @@ export const CHAOS_MODELS: CodexEntry[] = [
     category: 'chaos',
     pipeline: 'ribbon',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [28, 40],
     audioFamily: 'chaos',
     latexFormula:
@@ -104,7 +104,7 @@ export const CHAOS_MODELS: CodexEntry[] = [
     category: 'chaos',
     pipeline: 'chaos_particles',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [26, 38],
     audioFamily: 'chaos',
     latexFormula:
@@ -123,7 +123,7 @@ export const CHAOS_MODELS: CodexEntry[] = [
     category: 'chaos',
     pipeline: 'chaos_particles',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [30, 42],
     audioFamily: 'chaos',
     latexFormula:
@@ -142,7 +142,7 @@ export const CHAOS_MODELS: CodexEntry[] = [
     category: 'chaos',
     pipeline: 'chaos_particles',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [32, 45],
     audioFamily: 'chaos',
     latexFormula:

@@ -56,6 +56,7 @@ export class CosmosApp {
   readonly callout: CalloutCanvas;
   readonly creatures: BaseMathCreature[];
   readonly lod: LODManager;
+  readonly cosmosCenter = new THREE.Vector3();
   readonly riemannTarget: AutopilotTarget;
   readonly creatureSystem = new CreatureSystem({ initialCount: 10, batchSize: 3, maxMs: 4 });
 
@@ -133,6 +134,7 @@ export class CosmosApp {
       flight: this.flight,
       floatingOrigin: this.floatingOrigin,
       logicalPos: this.logicalPos,
+      cosmosCenter: this.cosmosCenter,
       riemannTarget: this.riemannTarget,
     };
 
@@ -202,11 +204,10 @@ export class CosmosApp {
   }
 
   private nearestCreature(entry: CodexEntry): BaseMathCreature {
-    const firstReady = this.creatures.find((c) => c.ready);
-    let nearest = firstReady ?? this.creatures[0];
+    let nearest: BaseMathCreature | null = null;
     let best = Infinity;
     for (const creature of this.creatures) {
-      if (!creature.ready) continue;
+      if (!creature.alive) continue;
       if (creature.config.modelType !== entry.modelType) continue;
       const dx =
         creature.group.position.x +
@@ -226,7 +227,13 @@ export class CosmosApp {
         nearest = creature;
       }
     }
-    return nearest;
+    if (nearest) return nearest;
+    // 三个槽位都处于消散间隔时，退回同类的最近已就绪实体
+    return (
+      this.creatures.find((c) => c.ready && c.config.modelType === entry.modelType) ??
+      this.creatures.find((c) => c.ready) ??
+      this.creatures[0]
+    );
   }
 
   private warpToCreature(entry: CodexEntry): void {

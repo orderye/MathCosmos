@@ -9,7 +9,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'parametric_surface',
     shell: 'main',
-    instanceCount: 6,
+    instanceCount: 3,
     scaleRange: [30, 45],
     audioFamily: 'topology',
     latexFormula: 'z_1^{\\,n}+z_2^{\\,n}=1,\\quad n=5',
@@ -27,7 +27,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'parametric_surface',
     shell: 'main',
-    instanceCount: 5,
+    instanceCount: 3,
     scaleRange: [26, 36],
     audioFamily: 'topology',
     latexFormula:
@@ -46,7 +46,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'tube_network',
     shell: 'main',
-    instanceCount: 8,
+    instanceCount: 3,
     scaleRange: [35, 55],
     audioFamily: 'topology',
     latexFormula:
@@ -65,7 +65,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'parametric_surface',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [28, 42],
     audioFamily: 'topology',
     latexFormula:
@@ -85,7 +85,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'parametric_surface',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [25, 36],
     audioFamily: 'topology',
     latexFormula:
@@ -104,7 +104,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'parametric_surface',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [30, 46],
     audioFamily: 'topology',
     latexFormula:
@@ -123,7 +123,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'parametric_surface',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [26, 40],
     audioFamily: 'topology',
     latexFormula:
@@ -142,7 +142,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'tube_network',
     shell: 'inner',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [30, 45],
     audioFamily: 'topology',
     latexFormula:
@@ -161,7 +161,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'parametric_surface',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [25, 36],
     audioFamily: 'topology',
     latexFormula:
@@ -180,7 +180,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'parametric_surface',
     shell: 'main',
-    instanceCount: 1,
+    instanceCount: 3,
     scaleRange: [32, 46],
     audioFamily: 'topology',
     latexFormula: '\\wp(z),\\quad z\\in(0,1)^2\\ \\text{Weierstrass 椭圆函数}',
@@ -198,7 +198,7 @@ export const SURFACE_MODELS: CodexEntry[] = [
     category: 'topology',
     pipeline: 'parametric_surface',
     shell: 'inner',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [30, 45],
     audioFamily: 'topology',
     latexFormula:

@@ -17,9 +17,12 @@ describe('model registry', () => {
     }
   });
 
-  it('shell distribution is 31 / 65 / 18', () => {
+  it('shell distribution is 30 / 63 / 27 with three slots per model', () => {
     const shells = { inner: 0, main: 0, outer: 0 };
-    for (const entry of MODEL_ORDER) shells[entry.shell] += entry.instanceCount;
-    expect(shells).toEqual({ inner: 31, main: 65, outer: 18 });
+    for (const entry of MODEL_ORDER) {
+      expect(entry.instanceCount).toBe(3);
+      shells[entry.shell] += entry.instanceCount;
+    }
+    expect(shells).toEqual({ inner: 30, main: 63, outer: 27 });
   });
 });

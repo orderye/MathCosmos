@@ -50,14 +50,16 @@ export class InputController {
     );
     this.raycaster.setFromCamera(this.pointer, camera);
     const hits = this.raycaster.intersectObjects(this.creatureGroups, true);
-    if (hits.length === 0) return false;
-    let obj: THREE.Object3D | null = hits[0].object;
-    while (obj && !obj.userData.codexType) obj = obj.parent;
-    const type = obj?.userData.codexType as string | undefined;
-    if (!type || !CODEX[type]) return false;
-    drawer.open(CODEX[type]);
-    if (document.pointerLockElement) document.exitPointerLock();
-    return true;
+    for (const hit of hits) {
+      let obj: THREE.Object3D | null = hit.object;
+      while (obj && !obj.userData.codexType) obj = obj.parent;
+      const type = obj?.userData.codexType as string | undefined;
+      if (!type || !CODEX[type] || !obj?.visible) continue;
+      drawer.open(CODEX[type]);
+      if (document.pointerLockElement) document.exitPointerLock();
+      return true;
+    }
+    return false;
   }
 
   dispose(): void {

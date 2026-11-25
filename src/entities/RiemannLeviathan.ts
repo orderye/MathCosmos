@@ -6,7 +6,7 @@ import {
   type CalloutAnchor,
   type RiemannProofGraphData,
 } from '../data/riemannProofGraph';
-import { MobiusFlightPath } from '../core/MobiusFlightPath';
+import { RiemannRoamPath } from '../core/RiemannRoamPath';
 import { LeviathanPilot } from '../core/flight/LeviathanPilot';
 import simplexNoise from '../shaders/chunks/simplexNoise3D.glsl?raw';
 import proximityWake from '../shaders/chunks/proximityWake.glsl?raw';
@@ -72,7 +72,7 @@ export class RiemannLeviathan {
   /** 当前威慑权重 0–1：玩家靠近时升高，驱动皇冠搏动与转头 */
   deterrence = 0;
 
-  private readonly path = new MobiusFlightPath();
+  private readonly path = new RiemannRoamPath();
   private readonly pilot = new LeviathanPilot();
   private readonly materials: THREE.ShaderMaterial[] = [];
   private readonly geometries: THREE.BufferGeometry[] = [];
@@ -275,7 +275,7 @@ export class RiemannLeviathan {
     this.disposables.push(this.crownMat, this.crownCoreMat);
     this.group.add(this.crown, this.crownCore);
 
-    // 首帧即落在导轨起点，避免开场从原点弹射到巡游位置
+    // 首帧即落在内外环巡游起点，避免开场从原点弹射到巡游位置
     this.path.sample(0, this.group.position, this.velocity, this.group.quaternion);
   }
 

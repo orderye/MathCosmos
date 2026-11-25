@@ -1,8 +1,14 @@
 import * as THREE from 'three';
-import { sampleOrbit, type OrbitalElements } from '../core/CelestialOrbitEngine';
+import {
+  createOrbitalElements,
+  createSeededRandom,
+  sampleOrbit,
+  type OrbitalElements,
+} from '../core/CelestialOrbitEngine';
 import { ResourceTracker } from '../core/ResourceTracker';
 import type { AudioFamily, MathCategory, ModelParams } from '../data/modelTypes';
 import { CreatureBehavior } from './behavior/CreatureBehavior';
+import { CreatureLifecycle, type CreatureLifecycleOptions } from './lifecycle/CreatureLifecycle';
 
 export type { MathCategory } from '../data/modelTypes';
 
@@ -24,6 +30,8 @@ export interface MathCreatureConfig {
   orbit: OrbitalElements;
   rotationAxis: THREE.Vector3;
   rotationSpeed: number;
+  /** 诞生—外飞—消散—重生的生命周期参数 */
+  lifecycle: CreatureLifecycleOptions;
 }
 
 export interface CreatureUniforms {
@@ -67,7 +75,9 @@ export abstract class BaseMathCreature {
   public readonly config: MathCreatureConfig;
   public readonly uniforms: CreatureUniforms;
   /** 个体自主行为：独立时钟变速、游荡与玩家反应 */
-  public readonly behavior: CreatureBehavior;
+  public behavior: CreatureBehavior;
+  /** 诞生—外飞—消散—重生时钟 */
+  public readonly lifecycle: CreatureLifecycle;
   public currentLOD: 0 | 1 | 2 = 0;
   public ready = false;
   protected readonly resources = new ResourceTracker();
@@ -75,15 +85,22 @@ export abstract class BaseMathCreature {
   protected lodSprite: THREE.Sprite | null = null;
 
   private static glowTexture: THREE.Texture | null = null;
-  /** 黎曼巨兽当前质心（宇宙根局部空间），每帧由主循环同步 */
+  /** 公转中心（宇宙根局部空间），固定世界原点由主循环同步 */
   private readonly referenceCenter = new THREE.Vector3();
+  private readonly spawnRng: () => number;
+  private spawnIndex = 0;
   private readonly tmpPos = new THREE.Vector3();
+  private readonly tmpDir = new THREE.Vector3();
   private readonly tmpTangent = new THREE.Vector3();
   private readonly tmpLook = new THREE.Vector3();
+  private readonly tmpUp = new THREE.Vector3();
+  private readonly tmpMatrix = new THREE.Matrix4();
 
   constructor(config: MathCreatureConfig) {
     this.config = config;
     this.behavior = new CreatureBehavior(config.modelType, config.category, config.orbit.seed);
+    this.lifecycle = new CreatureLifecycle(config.lifecycle);
+    this.spawnRng = createSeededRandom(Math.floor(config.orbit.seed * 2654435761));
     this.uniforms = {
       uTime: { value: 0 },
       uPlayerPos: { value: new THREE.Vector3() },
@@ -103,6 +120,11 @@ export abstract class BaseMathCreature {
     if (this.ready) return;
     this.init();
     this.ready = true;
+  }
+
+  /** 是否处于可见生命周期；消散后的间隔期不参与音频、拾取与跃迁 */
+  public get alive(): boolean {
+    return this.ready && this.lifecycle.alive;
   }
 
   /** 注册一个参与 LOD 的部件；基类统一应用 drawRange / 实例数 / 几何切换 */
@@ -159,6 +181,7 @@ export abstract class BaseMathCreature {
         blending: THREE.AdditiveBlending,
         transparent: true,
         depthWrite: false,
+        opacity: this.lifecycle.spriteOpacity,
       });
       this.lodSprite = new THREE.Sprite(mat);
       // group 已带 config.scale，精灵只需按本体半径的 2.6 倍局部缩放
@@ -179,6 +202,13 @@ export abstract class BaseMathCreature {
     playerPos: THREE.Vector3,
     playerVel: THREE.Vector3,
   ): void {
+    if (this.lifecycle.tick(delta)) this.respawn();
+    if (!this.lifecycle.alive) {
+      this.group.visible = false;
+      return;
+    }
+    this.group.visible = true;
+
     this.behavior.tick(delta);
     sampleOrbit(
       this.config.orbit,
@@ -187,10 +217,33 @@ export abstract class BaseMathCreature {
       this.tmpPos,
       this.tmpTangent,
     );
-    this.behavior.applyOffsets(this.tmpPos, this.tmpTangent, playerPos, delta);
+
+    // 保留轨道方向，半径按生命周期从凝聚点单调外扩到壳层半径之外
+    this.tmpDir.copy(this.tmpPos).sub(this.referenceCenter);
+    const orbitRadius = this.tmpDir.length();
+    if (orbitRadius > 1e-6) {
+      this.tmpDir.multiplyScalar(1 / orbitRadius);
+      const targetRadius = this.config.orbit.semiMajor * this.lifecycle.radiusGrowth;
+      const desiredRadius =
+        this.lifecycle.options.spawnRadius +
+        (targetRadius - this.lifecycle.options.spawnRadius) * this.lifecycle.expansion;
+      this.tmpPos.copy(this.referenceCenter).addScaledVector(this.tmpDir, desiredRadius);
+    }
+
+    this.behavior.applyOffsets(
+      this.tmpPos,
+      this.tmpTangent,
+      playerPos,
+      delta,
+      this.lifecycle.offsetScale,
+    );
     this.group.position.copy(this.tmpPos);
     this.tmpLook.copy(this.tmpPos).add(this.tmpTangent);
-    this.group.lookAt(this.tmpLook);
+    // 全球面轨道会出现切线接近世界 Y 的情况，显式换参考轴避免 lookAt 退化
+    this.tmpUp.set(0, 1, 0);
+    if (Math.abs(this.tmpTangent.y) > 0.98) this.tmpUp.set(1, 0, 0);
+    this.tmpMatrix.lookAt(this.tmpLook, this.tmpPos, this.tmpUp);
+    this.group.quaternion.setFromRotationMatrix(this.tmpMatrix);
     // 姿态微动由行为档案增益驱动，同型个体不同步
     this.group.rotateZ(this.behavior.rollAngle(elapsed));
     this.group.rotateX(this.behavior.pitchAngle(elapsed));
@@ -199,8 +252,25 @@ export abstract class BaseMathCreature {
       this.config.rotationSpeed * this.behavior.spinScale * delta,
     );
 
+    this.group.scale.setScalar(this.config.scale * this.lifecycle.visualScale);
+    if (this.lodSprite) {
+      (this.lodSprite.material as THREE.SpriteMaterial).opacity = this.lifecycle.spriteOpacity;
+    }
+
     this.uniforms.uTime.value = elapsed;
     (this.uniforms.uPlayerPos.value as THREE.Vector3).copy(playerPos);
     (this.uniforms.uPlayerVel.value as THREE.Vector3).copy(playerVel);
+  }
+
+  /** 本轮消散完成：重掷轨道与行为种子，下一次 update 从凝聚点重新放大 */
+  private respawn(): void {
+    const seed = Math.floor(this.spawnRng() * 0xffffffff);
+    this.config.orbit = createOrbitalElements(
+      this.config.orbit.layer,
+      this.spawnRng,
+      this.spawnIndex++,
+    );
+    this.behavior.reset(seed);
+    this.group.visible = true;
   }
 }

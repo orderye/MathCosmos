@@ -76,7 +76,7 @@ export class CreatureSystem implements CosmosSystem {
 
     for (const creature of creatures) {
       if (!creature.ready) continue;
-      creature.setReferenceFrame(ctx.leviathan.group.position);
+      creature.setReferenceFrame(ctx.cosmosCenter);
       creature.update(delta, elapsed, ctx.camera.position, ctx.flight.velocity);
     }
   }

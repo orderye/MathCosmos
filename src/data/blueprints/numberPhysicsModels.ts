@@ -9,7 +9,7 @@ export const NUMBER_PHYSICS_MODELS: CodexEntry[] = [
     category: 'analysis',
     pipeline: 'tube_network',
     shell: 'inner',
-    instanceCount: 6,
+    instanceCount: 3,
     scaleRange: [25, 38],
     audioFamily: 'quantum',
     latexFormula:
@@ -28,7 +28,7 @@ export const NUMBER_PHYSICS_MODELS: CodexEntry[] = [
     category: 'physics',
     pipeline: 'parametric_surface',
     shell: 'inner',
-    instanceCount: 6,
+    instanceCount: 3,
     scaleRange: [26, 38],
     audioFamily: 'quantum',
     latexFormula: 'r(\\theta,\\phi)=0.6+0.8\\,|Y_l^{m}(\\theta,\\phi)|',
@@ -46,7 +46,7 @@ export const NUMBER_PHYSICS_MODELS: CodexEntry[] = [
     category: 'number-theory',
     pipeline: 'point_cloud',
     shell: 'inner',
-    instanceCount: 6,
+    instanceCount: 3,
     scaleRange: [35, 55],
     audioFamily: 'quantum',
     latexFormula: 'r_n=c\\sqrt{n},\\quad \\theta_n=n\\pi(3-\\sqrt{5})',
@@ -64,7 +64,7 @@ export const NUMBER_PHYSICS_MODELS: CodexEntry[] = [
     category: 'number-theory',
     pipeline: 'point_cloud',
     shell: 'inner',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [42, 60],
     audioFamily: 'quantum',
     latexFormula:
@@ -83,7 +83,7 @@ export const NUMBER_PHYSICS_MODELS: CodexEntry[] = [
     category: 'physics',
     pipeline: 'point_cloud',
     shell: 'inner',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [32, 46],
     audioFamily: 'quantum',
     latexFormula:
@@ -103,7 +103,7 @@ export const NUMBER_PHYSICS_MODELS: CodexEntry[] = [
     category: 'pde',
     pipeline: 'instanced_lattice',
     shell: 'main',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [30, 44],
     audioFamily: 'quantum',
     latexFormula:
@@ -123,7 +123,7 @@ export const NUMBER_PHYSICS_MODELS: CodexEntry[] = [
     category: 'number-theory',
     pipeline: 'parametric_surface',
     shell: 'inner',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [28, 40],
     audioFamily: 'quantum',
     latexFormula:
@@ -143,7 +143,7 @@ export const NUMBER_PHYSICS_MODELS: CodexEntry[] = [
     category: 'physics',
     pipeline: 'tube_network',
     shell: 'inner',
-    instanceCount: 2,
+    instanceCount: 3,
     scaleRange: [32, 46],
     audioFamily: 'quantum',
     latexFormula:

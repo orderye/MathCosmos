@@ -26,5 +26,7 @@ export interface WorldContext {
   readonly flight: FlightController;
   readonly floatingOrigin: FloatingOrigin;
   readonly logicalPos: THREE.Vector3;
+  /** 固定的逻辑宇宙中心：所有模型公转的绝对参考点 */
+  readonly cosmosCenter: THREE.Vector3;
   readonly riemannTarget: AutopilotTarget;
 }
