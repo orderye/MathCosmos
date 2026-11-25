@@ -5,8 +5,9 @@
 
 ## 1. 总体状态
 
-- 模型：**M01–M40 共 40 类**，实例 **114 个**
-- 壳层：内环 **31** / 中环 **65** / 外环 **18**
+- 模型：**M01–M40 共 40 类**，实例 **120 个**（40 类 × 3 槽位）
+- 壳层：内环 **30** / 中环 **63** / 外环 **27**
+- 生命周期：每个实例按“诞生—外飞—消散—重生”循环，槽位错相位
 - 分类枚举：`number-theory / chaos / topology / fractal / analysis / physics / high-dim / pde`
 - 音频：按 `audioFamily`（`chaos / topology / high-dim / fractal / quantum`）选音色，与视觉分类解耦
 - 视觉：40 类全部具备 LOD0/LOD1/LOD2
@@ -14,19 +15,19 @@
 
 ## 2. 壳层与模型
 
-### 内环 · 数论 / 量子朝圣带（31）
+### 内环 · 数论 / 量子朝圣带（30）
 
 M10 Fourier、M11 Harmonics、M12 Phyllotaxis、M26 Ulam Prime、M27 Hydrogen、
 M28 Lissajous、M32 E8、M35 Zeta、M38 Dipole、M40 Möbius。
 
-### 中环 · 混沌 / 拓扑洋流带（65）
+### 中环 · 混沌 / 拓扑洋流带（63）
 
 M01 Lorenz、M02 Rössler、M03 Aizawa、M04 Calabi-Yau、M05 Klein、M06 Torus Knot、
 M09 Hopf、M13 Thomas、M14 Halvorsen、M15 Chen-Lee、M16 Enneper、M17 Boy、M18 Dini、
 M19 Helicoid–Catenoid、M20 24-cell、M21 Clifford Torus、M30 Roman、M33 Kuramoto、
 M34 Dadras、M36 Costa、M39 ABC Flow。
 
-### 外环 · 分形 / 深空边疆带（18）
+### 外环 · 分形 / 深空边疆带（27）
 
 M07 Mandelbulb、M08 Sierpinski、M22 Quaternion Julia、M23 Apollonian、M24 Poincaré、
 M25 Gray-Scott、M29 Gyroid、M31 Menger、M37 Quasicrystal。
@@ -70,7 +71,7 @@ M25 Gray-Scott、M29 Gyroid、M31 Menger、M37 Quasicrystal。
 
 ```bash
 npm run ci               # typecheck + vitest + build + bundle budget
-npm run verify:ego       # 114 实体 / 40 类 / 壳层 / LOD / 跃迁 / 0 错误
+npm run verify:ego       # 120 实体 / 40 类 / 壳层 / 6DoF / LOD / 跃迁 / 0 错误
 npm run verify:resources # dispose 后资源残留 / GPU 内存回落
 npm run verify:perf      # 批量 CPU / DrawCall / 三角形
 ```

@@ -9,17 +9,30 @@ const path = await import('node:path');
 const root = process.env.INIT_CWD || process.env.PWD || '.';
 const updateFlag = path.join(root, 'tests/.visual-update');
 const updateMode = await fsp.access(updateFlag).then(() => true, () => false);
+const configPath = path.join(root, 'tests/.visual-config.json');
+let visualConfig = {};
+try {
+  visualConfig = JSON.parse(await fsp.readFile(configPath, 'utf8'));
+} catch {}
 const outDir = process.env.VISUAL_DIR
   ? path.resolve(root, process.env.VISUAL_DIR)
   : path.join(root, updateMode ? 'tests/visual-baseline' : 'tests/visual-current');
-const baseUrl = process.env.COSMOS_URL || 'http://localhost:5173/';
+const baseUrl = visualConfig.url || process.env.COSMOS_URL || 'http://localhost:5173/app.html';
 
 await fsp.mkdir(outDir, { recursive: true });
 
 const task = await taskSpace('cosmos-visual-baseline');
 const page = (await task.pages())[0] ?? (await task.newPage());
+await page.cdp('Emulation.setDeviceMetricsOverride', {
+  width: 1362,
+  height: 881,
+  deviceScaleFactor: 1,
+  mobile: false,
+});
 await page.cdp('Page.addScriptToEvaluateOnNewDocument', {
-  source: `window.__ERR__ = [];
+  // IIFE 隔离局部变量：同一页面重复注入时不会因顶层 const 重声明而报错
+  source: `(() => {
+    window.__ERR__ = [];
     const orig = console.error.bind(console);
     console.error = (...args) => {
       window.__ERR__.push(args.map((a) => {
@@ -27,7 +40,8 @@ await page.cdp('Page.addScriptToEvaluateOnNewDocument', {
       }).join(' '));
       orig(...args);
     };
-    window.addEventListener('error', (e) => window.__ERR__.push('window.error: ' + e.message));`,
+    window.addEventListener('error', (e) => window.__ERR__.push('window.error: ' + e.message));
+  })();`,
 });
 
 await page.goto(baseUrl + '?t=' + Date.now(), { timeout: 60000 });
@@ -76,6 +90,17 @@ const entries = await page.evaluate(() => {
 const LOOSE_TOLERANCE = new Set(['hopf', 'fourier', 'harmonics']);
 const KURAMOTO_TOLERANCE = { mean: 80, changed: 0.9 };
 
+// 40 类连续捕获会让 SwiftShader 单页累计到渲染上限并掉页，可按 10 类分块跑
+const chunkStart = Number(visualConfig.start ?? process.env.VISUAL_START ?? 0);
+const chunkEnd =
+  visualConfig.end != null
+    ? Number(visualConfig.end)
+    : process.env.VISUAL_END
+      ? Number(process.env.VISUAL_END)
+      : entries.length;
+const chunk = entries.slice(chunkStart, chunkEnd);
+const chunked = chunkStart > 0 || chunkEnd < entries.length;
+
 function toleranceFor(type) {
   if (type === 'kuramoto') return KURAMOTO_TOLERANCE;
   if (LOOSE_TOLERANCE.has(type)) return { mean: 70, changed: 0.6 };
@@ -83,7 +108,7 @@ function toleranceFor(type) {
 }
 
 const manifest = [];
-for (const entry of entries) {
+for (const entry of chunk) {
   await page.evaluate(({ type }) => {
     const c = window.__COSMOS__;
     c.flight.detach();
@@ -93,6 +118,10 @@ for (const entry of entries) {
     c.leviathan.group.visible = false;
     c.dust.mesh.visible = false;
     target.setLOD(0);
+    // 固定到生命周期中段并重置行为时钟，保证每次基线取景一致
+    target.behavior.reset(target.config.orbit.seed);
+    target.lifecycle.seek(0.5);
+    target.update(0, 0, c.engine.camera.position, c.flight.velocity);
 
     const world = target.group.position.clone().add(c.engine.universeRoot.position);
     const Vec3 = c.flight.position.constructor;
@@ -134,12 +163,16 @@ for (const entry of entries) {
   process.stdout.write(`captured ${file}\n`);
 }
 
+const manifestPath = path.join(
+  outDir,
+  chunked ? `manifest-${chunkStart}-${chunkEnd}.json` : 'manifest.json',
+);
 await fsp.writeFile(
-  path.join(outDir, 'manifest.json'),
+  manifestPath,
   JSON.stringify({ capturedAt: new Date().toISOString(), count: manifest.length, entries: manifest }, null, 2),
 );
 
 const errors = await page.evaluate(() => (window.__ERR__ || []).slice(0, 10));
-console.log(JSON.stringify({ outDir, count: manifest.length, errors }, null, 2));
+console.log(JSON.stringify({ outDir, manifestPath, count: manifest.length, errors }, null, 2));
 await page.close();
 if (errors.length) throw new Error('视觉基线捕获期间出现错误：' + errors.join(' | '));

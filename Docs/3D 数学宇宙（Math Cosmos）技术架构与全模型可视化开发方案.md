@@ -39,7 +39,8 @@
 
 ```text
 math-cosmos/
-├── index.html
+├── index.html                      # 宣传主页（Apple 风格入口，点击进入 app.html）
+├── app.html                        # 主体验入口
 ├── package.json
 ├── tsconfig.json
 └── src/

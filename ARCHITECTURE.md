@@ -14,14 +14,14 @@ src/
     SystemRunner.ts        固定顺序调度 + 逐系统 EMA 耗时
     FlightController.ts    飞控状态机门面
     flight/                FlightInput / ManualPilot / WarpPilot / OrbitEscort / CameraRig
-    CelestialOrbitEngine.ts 开普勒轨道解算
-    MobiusFlightPath.ts    黎曼巨兽莫比乌斯导轨
+    CelestialOrbitEngine.ts 固定中心 + 全球面 6DoF 轨道解算
+    RiemannRoamPath.ts     黎曼巨兽 500–3400 内外环巡游导轨
     ResourceTracker.ts     资源登记与统一释放
     PerformanceProbe.ts    update/render/frame 分项与渲染统计
   systems/                 8 个逐帧系统
   entities/
     BaseMathCreature.ts    实体基类：轨道/姿态/uniform/LOD/资源
-    CreatureFactory.ts     注册表 → 114 个延迟初始化实例
+    CreatureFactory.ts     注册表 → 120 个延迟初始化实例（40 类 × 3 槽位）
     RiemannLeviathan.ts    巨兽几何、材质、皇冠、世界矩阵
     models/                40 类模型
     models/base/           共享渲染基底与材质工厂
@@ -39,7 +39,7 @@ src/
 requestAnimationFrame
   → Engine.tick
     → SystemRunner.update
-      1. leviathan   巨兽巡游 + 皇冠 + 共享 uniform
+      1. leviathan   巨兽内外环巡游 + 皇冠 + 共享 uniform
       2. navigation  飞控 → 漂浮原点 → 巨兽世界矩阵
       3. dust        星尘同步
       4. creatures   分帧初始化 + 轨道/姿态/模型动画
@@ -53,6 +53,13 @@ requestAnimationFrame
 ```
 
 顺序不可交换：跃迁目标读取上一帧速度；漂浮原点重置后必须重算巨兽质心；音频依赖 `worldPosition`。
+
+### 2.1 运动学口径
+
+- 公转中心是 `WorldContext.cosmosCenter`（宇宙根局部原点），不跟随黎曼巨兽；浮动原点只平移渲染根节点。
+- 120 个实例（40 类 × 3 槽位）保持内环 30 / 中环 63 / 外环 27；轨道法向与自旋轴球面均匀采样，位置三轴与姿态三轴共同构成 6DoF。
+- 黎曼巨兽沿 `RiemannRoamPath` 在半径 500–3400 间往返，方位角持续推进；蛇形与俯冲偏移在内外边界平滑收束。
+- 个体行为层与巨兽 `LeviathanPilot` 继续叠加在运动骨架之上，不改变中心与轨道契约。
 
 ## 3. 模型管线
 
@@ -92,7 +99,7 @@ requestAnimationFrame
 |---|---|---|
 | L0 纯数学 | 素数、ζ 零点、Gyroid、Julia、Apollonian、E8、氢原子、Kuramoto、开普勒 | `npm test` |
 | L1 单元 | ResourceTracker、CreatureSystem 分帧、Warp/Orbit/Doppler、PerformanceProbe | `npm test` |
-| L2 集成 | 40 类 / 114 实例 / 壳层 / 注册表构造器 | `npm test` |
+| L2 集成 | 40 类 / 120 实例 / 壳层 / 注册表构造器 | `npm test` |
 | L3 运行时 | 场景冒烟、资源释放、性能门禁、视觉基线 | `npm run verify:ego` 等 |
 
 ## 7. 已知近似
