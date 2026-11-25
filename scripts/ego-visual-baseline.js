@@ -82,7 +82,22 @@ const entries = await page.evaluate(() => {
   for (const cr of c.creatures) {
     if (seen.has(cr.config.modelType)) continue;
     seen.add(cr.config.modelType);
-    result.push({ code: cr.config.code, type: cr.config.modelType });
+    const sameType = c.creatures.filter((x) => x.config.modelType === cr.config.modelType);
+    let best = sameType[0];
+    let bestDelta = Infinity;
+    for (const candidate of sameType) {
+      if (!candidate.alive) continue;
+      const delta = Math.abs(candidate.lifecycle.progress - 0.5);
+      if (delta < bestDelta) {
+        bestDelta = delta;
+        best = candidate;
+      }
+    }
+    result.push({
+      code: cr.config.code,
+      type: cr.config.modelType,
+      slot: c.creatures.indexOf(best),
+    });
   }
   return result.sort((a, b) => a.code.localeCompare(b.code));
 });
@@ -109,19 +124,16 @@ function toleranceFor(type) {
 
 const manifest = [];
 for (const entry of chunk) {
-  await page.evaluate(({ type }) => {
+  await page.evaluate(({ type, slot }) => {
     const c = window.__COSMOS__;
     c.flight.detach();
     c.flight.target = null;
-    const target = c.creatures.find((x) => x.config.modelType === type && x.ready);
+    const target = c.creatures[slot];
     for (const cr of c.creatures) cr.group.visible = cr.config.modelType === type;
     c.leviathan.group.visible = false;
     c.dust.mesh.visible = false;
+    target.group.visible = true;
     target.setLOD(0);
-    // 固定到生命周期中段并重置行为时钟，保证每次基线取景一致
-    target.behavior.reset(target.config.orbit.seed);
-    target.lifecycle.seek(0.5);
-    target.update(0, 0, c.engine.camera.position, c.flight.velocity);
 
     const world = target.group.position.clone().add(c.engine.universeRoot.position);
     const Vec3 = c.flight.position.constructor;
@@ -136,9 +148,10 @@ for (const entry of chunk) {
   }, entry);
   // 首次 LOD0 可能触发着色器编译；等编译完成后再按模型当前位置重新取景
   await page.waitForTimeout(2000);
-  await page.evaluate(({ type }) => {
+  await page.evaluate(({ slot }) => {
     const c = window.__COSMOS__;
-    const target = c.creatures.find((x) => x.config.modelType === type && x.ready);
+    const target = c.creatures[slot];
+    target.group.visible = true;
     target.setLOD(0);
     const world = target.group.position.clone().add(c.engine.universeRoot.position);
     const Vec3 = c.flight.position.constructor;

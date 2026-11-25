@@ -1,50 +1,59 @@
 {
-  "capturedAt": "2026-11-25T09:44:36.969Z",
+  "capturedAt": "2026-11-25T11:40:55.413Z",
   "count": 40,
   "entries": [
     {
       "code": "M01",
       "type": "lorenz",
+      "slot": 0,
       "file": "M01-lorenz.png"
     },
     {
       "code": "M02",
       "type": "rossler",
+      "slot": 3,
       "file": "M02-rossler.png"
     },
     {
       "code": "M03",
       "type": "aizawa",
+      "slot": 6,
       "file": "M03-aizawa.png"
     },
     {
       "code": "M04",
       "type": "calabi-yau",
+      "slot": 9,
       "file": "M04-calabi-yau.png"
     },
     {
       "code": "M05",
       "type": "klein",
+      "slot": 12,
       "file": "M05-klein.png"
     },
     {
       "code": "M06",
       "type": "torus-knot",
+      "slot": 15,
       "file": "M06-torus-knot.png"
     },
     {
       "code": "M07",
       "type": "mandelbulb",
+      "slot": 19,
       "file": "M07-mandelbulb.png"
     },
     {
       "code": "M08",
       "type": "sierpinski",
+      "slot": 22,
       "file": "M08-sierpinski.png"
     },
     {
       "code": "M09",
       "type": "hopf",
+      "slot": 25,
       "file": "M09-hopf.png",
       "tolerance": {
         "mean": 70,
@@ -54,6 +63,7 @@
     {
       "code": "M10",
       "type": "fourier",
+      "slot": 27,
       "file": "M10-fourier.png",
       "tolerance": {
         "mean": 70,
@@ -63,6 +73,7 @@
     {
       "code": "M11",
       "type": "harmonics",
+      "slot": 30,
       "file": "M11-harmonics.png",
       "tolerance": {
         "mean": 70,
@@ -72,111 +83,133 @@
     {
       "code": "M12",
       "type": "phyllotaxis",
+      "slot": 33,
       "file": "M12-phyllotaxis.png"
     },
     {
       "code": "M13",
       "type": "thomas",
+      "slot": 36,
       "file": "M13-thomas.png"
     },
     {
       "code": "M14",
       "type": "halvorsen",
+      "slot": 40,
       "file": "M14-halvorsen.png"
     },
     {
       "code": "M15",
       "type": "chen-lee",
+      "slot": 43,
       "file": "M15-chen-lee.png"
     },
     {
       "code": "M16",
       "type": "enneper",
+      "slot": 46,
       "file": "M16-enneper.png"
     },
     {
       "code": "M17",
       "type": "boy",
+      "slot": 49,
       "file": "M17-boy.png"
     },
     {
       "code": "M18",
       "type": "dini",
+      "slot": 51,
       "file": "M18-dini.png"
     },
     {
       "code": "M19",
       "type": "helicoid-catenoid",
+      "slot": 54,
       "file": "M19-helicoid-catenoid.png"
     },
     {
       "code": "M20",
       "type": "cell-24",
+      "slot": 58,
       "file": "M20-cell-24.png"
     },
     {
       "code": "M21",
       "type": "clifford-torus",
+      "slot": 61,
       "file": "M21-clifford-torus.png"
     },
     {
       "code": "M22",
       "type": "quaternion-julia",
+      "slot": 64,
       "file": "M22-quaternion-julia.png"
     },
     {
       "code": "M23",
       "type": "apollonian",
+      "slot": 67,
       "file": "M23-apollonian.png"
     },
     {
       "code": "M24",
       "type": "poincare",
+      "slot": 70,
       "file": "M24-poincare.png"
     },
     {
       "code": "M25",
       "type": "gray-scott",
+      "slot": 73,
       "file": "M25-gray-scott.png"
     },
     {
       "code": "M26",
       "type": "ulam-prime",
+      "slot": 75,
       "file": "M26-ulam-prime.png"
     },
     {
       "code": "M27",
       "type": "hydrogen",
+      "slot": 78,
       "file": "M27-hydrogen.png"
     },
     {
       "code": "M28",
       "type": "lissajous",
+      "slot": 81,
       "file": "M28-lissajous.png"
     },
     {
       "code": "M29",
       "type": "gyroid",
+      "slot": 85,
       "file": "M29-gyroid.png"
     },
     {
       "code": "M30",
       "type": "roman",
+      "slot": 87,
       "file": "M30-roman.png"
     },
     {
       "code": "M31",
       "type": "menger",
+      "slot": 91,
       "file": "M31-menger.png"
     },
     {
       "code": "M32",
       "type": "e8",
+      "slot": 93,
       "file": "M32-e8.png"
     },
     {
       "code": "M33",
       "type": "kuramoto",
+      "slot": 96,
       "file": "M33-kuramoto.png",
       "tolerance": {
         "mean": 80,
@@ -186,36 +219,43 @@
     {
       "code": "M34",
       "type": "dadras",
+      "slot": 99,
       "file": "M34-dadras.png"
     },
     {
       "code": "M35",
       "type": "zeta",
+      "slot": 102,
       "file": "M35-zeta.png"
     },
     {
       "code": "M36",
       "type": "costa",
+      "slot": 105,
       "file": "M36-costa.png"
     },
     {
       "code": "M37",
       "type": "quasicrystal",
+      "slot": 109,
       "file": "M37-quasicrystal.png"
     },
     {
       "code": "M38",
       "type": "dipole",
+      "slot": 111,
       "file": "M38-dipole.png"
     },
     {
       "code": "M39",
       "type": "abc-flow",
+      "slot": 115,
       "file": "M39-abc-flow.png"
     },
     {
       "code": "M40",
       "type": "mobius-twisted",
+      "slot": 117,
       "file": "M40-mobius-twisted.png"
     }
   ]
