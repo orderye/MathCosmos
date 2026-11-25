@@ -2,6 +2,8 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  // GitHub Pages 项目站点位于 /MathCosmos/ 子路径；相对 base 同时兼容本地根路径
+  base: './',
   server: { port: 5173 },
   build: {
     target: 'es2022',

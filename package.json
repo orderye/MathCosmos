@@ -11,6 +11,7 @@
     "test": "vitest run",
     "ci": "npm run typecheck && npm test && npm run build && npm run check:bundle",
     "check:bundle": "node scripts/check-bundle.mjs",
+    "deploy:pages": "bash scripts/deploy-pages.sh",
     "verify:ego": "ego-browser nodejs < scripts/ego-smoke.js",
     "verify:resources": "ego-browser nodejs < scripts/ego-resource-audit.js",
     "verify:perf": "ego-browser nodejs < scripts/ego-perf-audit.js",
