@@ -1,0 +1,1277 @@
+<!doctype html>
+<html lang="zh-CN" class="i18n-loading">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math Cosmos · 数学宇宙</title>
+    <meta
+      name="description"
+      content="从黎曼 ζ 函数的临界带出发，四十类数学结构、一百一十四个独立生命体，在同一个三维宇宙里呼吸与巡游。"
+    />
+    <meta name="theme-color" content="#000000" />
+    <script>
+      (function () {
+        var supported = ['zh', 'en', 'ja', 'ko', 'de', 'fr', 'ru'];
+        var chosen = null;
+        try {
+          chosen = window.localStorage.getItem('math-cosmos-locale');
+        } catch (error) {}
+        if (supported.indexOf(chosen) < 0) {
+          chosen = null;
+          var list =
+            navigator.languages && navigator.languages.length
+              ? navigator.languages
+              : [navigator.language || 'en'];
+          for (var i = 0; i < list.length; i += 1) {
+            var code = String(list[i]).toLowerCase().split('-')[0];
+            if (supported.indexOf(code) >= 0) {
+              chosen = code;
+              break;
+            }
+          }
+        }
+        var locale = chosen || 'en';
+        window.__LANDING_LOCALE__ = locale;
+        document.documentElement.lang = locale === 'zh' ? 'zh-CN' : locale;
+        window.setTimeout(function () {
+          document.documentElement.classList.remove('i18n-loading');
+        }, 1500);
+      })();
+    </script>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23030306'/%3E%3Ctext x='32' y='47' font-size='42' text-anchor='middle' fill='%23c084fc'%3E%CE%B6%3C/text%3E%3C/svg%3E"
+    />
+    <style>
+      :root {
+        --bg: #000000;
+        --ink: #f5f5f7;
+        --muted: #86868b;
+        --muted-strong: #a1a1a6;
+        --paper: #f5f5f7;
+        --paper-ink: #1d1d1f;
+        --paper-muted: #6e6e73;
+        --violet: #a855f7;
+        --violet-deep: #7c3aed;
+        --nav-h: 48px;
+        --font-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue',
+          'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+        --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--font-display);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        overflow-x: hidden;
+      }
+
+      ::selection {
+        background: rgba(168, 85, 247, 0.35);
+        color: #fff;
+      }
+
+      /* 首帧由内联脚本判定系统语言，翻译完成前先隐藏可翻译文本，避免中文闪烁 */
+      html.i18n-loading [data-i18n],
+      html.i18n-loading [data-i18n-html] {
+        opacity: 0;
+      }
+
+      /* ---------- 导航 ---------- */
+
+      .nav {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 60;
+        height: var(--nav-h);
+        background: rgba(8, 8, 10, 0.72);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        transition: background 220ms ease;
+      }
+
+      .nav.scrolled {
+        background: rgba(8, 8, 10, 0.88);
+      }
+
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1024px;
+        height: 100%;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: var(--ink);
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        text-decoration: none;
+      }
+
+      .nav-brand .mark {
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 19px;
+        font-weight: 400;
+        color: #c084fc;
+        text-shadow: 0 0 18px rgba(192, 132, 252, 0.6);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+      }
+
+      .nav-links a {
+        color: rgba(245, 245, 247, 0.72);
+        font-size: 12px;
+        letter-spacing: 0.01em;
+        text-decoration: none;
+        transition: color 180ms ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--ink);
+      }
+
+      .nav-cta {
+        padding: 6px 14px;
+        color: var(--ink) !important;
+        border: 1px solid rgba(192, 132, 252, 0.5);
+        border-radius: 980px;
+        background: rgba(168, 85, 247, 0.14);
+        transition: background 180ms ease, border-color 180ms ease;
+      }
+
+      .nav-cta:hover {
+        border-color: rgba(216, 180, 254, 0.9);
+        background: rgba(168, 85, 247, 0.28);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .nav-github {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        color: rgba(245, 245, 247, 0.72);
+        text-decoration: none;
+        transition: color 180ms ease, background 180ms ease;
+      }
+
+      .nav-github:hover {
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .nav-github svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .lang {
+        position: relative;
+      }
+
+      .lang-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 2px;
+        border: 0;
+        background: none;
+        color: rgba(245, 245, 247, 0.72);
+        font-family: inherit;
+        font-size: 12px;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        transition: color 180ms ease;
+      }
+
+      .lang-toggle:hover,
+      .lang.open .lang-toggle {
+        color: var(--ink);
+      }
+
+      .lang-toggle svg {
+        width: 14px;
+        height: 14px;
+        opacity: 0.7;
+      }
+
+      .lang-code {
+        display: none;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.08em;
+      }
+
+      .lang-chevron {
+        color: var(--muted);
+        font-size: 9px;
+        transition: transform 180ms ease;
+      }
+
+      .lang.open .lang-chevron {
+        transform: rotate(180deg);
+      }
+
+      .lang-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: -6px;
+        width: 194px;
+        padding: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        background: rgba(18, 18, 22, 0.94);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+        backdrop-filter: saturate(180%) blur(24px);
+        -webkit-backdrop-filter: saturate(180%) blur(24px);
+        opacity: 0;
+        transform: translateY(-4px) scale(0.98);
+        transform-origin: top right;
+        pointer-events: none;
+        transition: opacity 160ms ease, transform 160ms ease;
+      }
+
+      .lang.open .lang-menu {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+
+      .lang-menu button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 9px 10px;
+        border: 0;
+        border-radius: 9px;
+        background: none;
+        color: var(--ink);
+        font-family: inherit;
+        font-size: 13px;
+        text-align: left;
+        cursor: pointer;
+        transition: background 140ms ease, color 140ms ease;
+      }
+
+      .lang-menu button:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .lang-menu button[aria-selected='true'] {
+        color: #e9d5ff;
+        background: rgba(168, 85, 247, 0.16);
+      }
+
+      .lang-menu small {
+        color: var(--muted);
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.08em;
+      }
+
+      .lang-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 55;
+        pointer-events: none;
+      }
+
+      .lang-backdrop.show {
+        pointer-events: auto;
+      }
+
+      /* ---------- 首屏 ---------- */
+
+      .hero {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100svh;
+        padding: calc(var(--nav-h) + 56px) 24px 26px;
+        overflow: hidden;
+        cursor: pointer;
+        background:
+          radial-gradient(120% 70% at 50% 0%, rgba(88, 28, 135, 0.22), transparent 62%),
+          var(--bg);
+        user-select: none;
+      }
+
+      .hero-copy {
+        position: relative;
+        z-index: 2;
+        max-width: 940px;
+        text-align: center;
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        margin: 0 0 22px;
+        color: rgba(216, 180, 254, 0.86);
+        font-size: 11px;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(38px, 6vw, 84px);
+        font-weight: 600;
+        line-height: 1.04;
+        letter-spacing: -0.025em;
+        background: linear-gradient(180deg, #ffffff 34%, #a1a1a6 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero h1 .grad {
+        background: linear-gradient(100deg, #e9d5ff 8%, #c084fc 42%, #67e8f9 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero .lede {
+        max-width: 620px;
+        margin: 22px auto 0;
+        color: var(--muted-strong);
+        font-size: clamp(15px, 1.25vw, 17px);
+        line-height: 1.62;
+        letter-spacing: 0.002em;
+      }
+
+      .stage {
+        position: relative;
+        flex: 1 1 auto;
+        width: min(1180px, 100%);
+        min-height: 268px;
+        margin-top: 6px;
+      }
+
+      #hero-canvas {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .halo {
+        position: absolute;
+        inset: 4% 8%;
+        z-index: 0;
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(168, 85, 247, 0.34),
+          rgba(56, 189, 248, 0.1) 42%,
+          transparent 68%
+        );
+        filter: blur(34px);
+        transform: scale(0.92);
+        animation: halo-breathe 9s ease-in-out infinite alternate;
+        pointer-events: none;
+      }
+
+      @keyframes halo-breathe {
+        from {
+          opacity: 0.72;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1.04);
+        }
+      }
+
+      .stage-meta {
+        position: absolute;
+        z-index: 2;
+        color: rgba(192, 132, 252, 0.5);
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .stage-meta.tl {
+        top: 4px;
+        left: 4px;
+      }
+
+      .stage-meta.br {
+        right: 4px;
+        bottom: 4px;
+        color: rgba(148, 163, 184, 0.45);
+      }
+
+      .orb {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: min(58%, 420px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 34% 30%, rgba(240, 171, 252, 0.95), transparent 34%),
+          conic-gradient(from 210deg, #1e1b4b, #7c3aed, #22d3ee, #1e1b4b);
+        filter: blur(1px) saturate(1.2);
+        box-shadow: 0 0 120px rgba(168, 85, 247, 0.45);
+        transform: translate(-50%, -50%);
+        animation: halo-breathe 9s ease-in-out infinite alternate;
+      }
+
+      .no-webgl .orb {
+        display: block;
+      }
+
+      .no-webgl #hero-canvas {
+        display: none;
+      }
+
+      .hero-actions {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        margin-top: 4px;
+      }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 14px 28px;
+        border: 0;
+        border-radius: 980px;
+        background: linear-gradient(135deg, var(--violet-deep), var(--violet));
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.1),
+          0 10px 40px rgba(124, 58, 237, 0.36);
+        color: #fff;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        transition: transform 220ms ease, box-shadow 220ms ease, filter 220ms ease;
+      }
+
+      .cta:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px) scale(1.02);
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.2),
+          0 18px 60px rgba(168, 85, 247, 0.5);
+      }
+
+      .cta:active {
+        transform: scale(0.99);
+      }
+
+      .cta .arrow {
+        font-size: 15px;
+        transition: transform 220ms ease;
+      }
+
+      .cta:hover .arrow {
+        transform: translate(2px, -2px);
+      }
+
+      .ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 12px 6px;
+        border: 0;
+        background: none;
+        color: var(--muted-strong);
+        font-family: inherit;
+        font-size: 14px;
+        cursor: pointer;
+        transition: color 200ms ease;
+      }
+
+      .ghost:hover {
+        color: var(--ink);
+      }
+
+      .ghost .down {
+        font-size: 13px;
+        animation: nudge 2.4s ease-in-out infinite;
+      }
+
+      @keyframes nudge {
+        0%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(3px);
+          opacity: 1;
+        }
+      }
+
+      .scroll-hint {
+        margin-top: 18px;
+        color: rgba(134, 134, 139, 0.75);
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      /* ---------- 通用区块 ---------- */
+
+      .section {
+        padding: clamp(84px, 12vh, 144px) 24px;
+      }
+
+      .inner {
+        max-width: 1024px;
+        margin: 0 auto;
+      }
+
+      .light {
+        background: var(--paper);
+        color: var(--paper-ink);
+      }
+
+      .dark {
+        background:
+          radial-gradient(90% 70% at 12% 0%, rgba(76, 29, 149, 0.24), transparent 60%),
+          var(--bg);
+      }
+
+      .section-eyebrow {
+        margin: 0 0 20px;
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      .dark .section-eyebrow {
+        color: rgba(216, 180, 254, 0.62);
+      }
+
+      h2 {
+        margin: 0;
+        font-size: clamp(30px, 4.4vw, 56px);
+        font-weight: 600;
+        line-height: 1.08;
+        letter-spacing: -0.022em;
+      }
+
+      .section-lede {
+        max-width: 640px;
+        margin: 26px 0 0;
+        color: var(--paper-muted);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .dark .section-lede {
+        color: var(--muted-strong);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(26px);
+        transition:
+          opacity 800ms cubic-bezier(0.16, 1, 0.3, 1),
+          transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+        transition-delay: var(--d, 0ms);
+      }
+
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* ---------- 数字 ---------- */
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+        margin-top: clamp(48px, 7vh, 80px);
+      }
+
+      .stat strong {
+        display: block;
+        font-size: clamp(48px, 7vw, 88px);
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: -0.045em;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stat span {
+        display: block;
+        margin-top: 12px;
+        color: var(--paper-muted);
+        font-size: 13px;
+        letter-spacing: 0.02em;
+      }
+
+      .stat small {
+        display: block;
+        margin-top: 4px;
+        color: #a1a1a6;
+        font-size: 11px;
+      }
+
+      .footnote {
+        max-width: 620px;
+        margin: clamp(40px, 6vh, 64px) 0 0;
+        color: var(--paper-muted);
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .dark .footnote {
+        color: var(--muted);
+      }
+
+      /* ---------- ζ 公式 ---------- */
+
+      .formula {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.28em;
+        margin: clamp(44px, 7vh, 72px) 0 0;
+        overflow-x: auto;
+        color: #f5eefe;
+        font-family: Georgia, 'Times New Roman', 'Songti SC', serif;
+        font-size: clamp(21px, 3.2vw, 38px);
+        line-height: 1.4;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        text-shadow: 0 0 40px rgba(168, 85, 247, 0.35);
+      }
+
+      .formula .frac {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        vertical-align: middle;
+        font-size: 0.72em;
+        line-height: 1.15;
+      }
+
+      .formula .frac .den {
+        padding-top: 0.14em;
+        border-top: 1px solid rgba(245, 238, 254, 0.7);
+      }
+
+      .formula sup,
+      .formula sub {
+        font-size: 0.58em;
+      }
+
+      .formula-note {
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+      }
+
+      .zeros {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: clamp(36px, 5vh, 52px);
+      }
+
+      .zero {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border: 1px solid rgba(216, 180, 254, 0.16);
+        border-radius: 980px;
+        background: rgba(255, 255, 255, 0.03);
+        color: #e9d5ff;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .zero i {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #f0abfc;
+        box-shadow: 0 0 10px #e879f9;
+        animation: twinkle 4.2s ease-in-out infinite;
+        animation-delay: var(--d, 0ms);
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.45;
+          transform: scale(0.82);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.18);
+        }
+      }
+
+      /* ---------- 能力卡片 ---------- */
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: clamp(44px, 6vh, 64px);
+      }
+
+      .card {
+        padding: 36px 32px 40px;
+        border-radius: 22px;
+        background: #ffffff;
+        box-shadow: 0 2px 18px rgba(0, 0, 0, 0.045);
+      }
+
+      .card .icon {
+        display: grid;
+        place-items: center;
+        width: 46px;
+        height: 46px;
+        margin-bottom: 22px;
+        border-radius: 13px;
+        background: linear-gradient(140deg, #f3e8ff, #ddd6fe);
+        color: #6d28d9;
+        font-family: var(--font-mono);
+        font-size: 17px;
+        font-weight: 500;
+      }
+
+      .card h3 {
+        margin: 0 0 10px;
+        font-size: 19px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--paper-muted);
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      /* ---------- 尾屏 ---------- */
+
+      .final {
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        background:
+          radial-gradient(70% 60% at 50% 110%, rgba(124, 58, 237, 0.4), transparent 66%),
+          var(--bg);
+      }
+
+      .final h2 {
+        font-size: clamp(34px, 5.4vw, 68px);
+      }
+
+      .final .cta {
+        margin-top: 40px;
+      }
+
+      .final .footnote {
+        margin: 28px auto 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      /* ---------- 页脚 ---------- */
+
+      .footer {
+        padding: 44px 24px 56px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        background: #000;
+      }
+
+      .footer-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        max-width: 1024px;
+        margin: 0 auto;
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.02em;
+      }
+
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 22px;
+      }
+
+      .footer a {
+        color: var(--muted-strong);
+        text-decoration: none;
+        transition: color 180ms ease;
+      }
+
+      .footer a:hover {
+        color: var(--ink);
+      }
+
+      /* ---------- 跃迁转场 ---------- */
+
+      .veil {
+        position: fixed;
+        inset: 0;
+        z-index: 90;
+        background: radial-gradient(circle at 50% 52%, #1b0a2e 0%, #050507 56%, #000 100%);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 820ms ease;
+      }
+
+      body.is-leaving .veil {
+        opacity: 1;
+      }
+
+      body.is-leaving .hero {
+        cursor: default;
+      }
+
+      body.is-leaving .hero-copy,
+      body.is-leaving .hero-actions,
+      body.is-leaving .scroll-hint,
+      body.is-leaving .stage-meta {
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity 420ms ease, transform 420ms ease;
+      }
+
+      /* ---------- 响应式 ---------- */
+
+      @media (max-width: 860px) {
+        .nav-links {
+          display: none;
+        }
+
+        .nav-actions {
+          gap: 12px;
+        }
+
+        .features {
+          grid-template-columns: 1fr;
+        }
+
+        .stage {
+          min-height: 250px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .lang-name {
+          display: none;
+        }
+
+        .lang-code {
+          display: inline;
+        }
+
+        .nav-actions {
+          gap: 10px;
+        }
+
+        .nav-cta {
+          padding: 5px 10px;
+          font-size: 11px;
+        }
+
+        .lang-toggle {
+          gap: 4px;
+        }
+
+        .lang-menu {
+          position: fixed;
+          top: calc(var(--nav-h) + 6px);
+          right: 12px;
+          left: auto;
+          width: min(220px, calc(100vw - 24px));
+        }
+
+        html:lang(ru) #hero-title {
+          font-size: clamp(30px, 8.8vw, 36px);
+        }
+
+        .hero {
+          padding-top: calc(var(--nav-h) + 40px);
+        }
+
+        .hero .lede {
+          font-size: 14px;
+        }
+
+        .hero-actions {
+          gap: 10px;
+        }
+
+        .cta {
+          padding: 13px 24px;
+        }
+
+        .scroll-hint {
+          display: none;
+        }
+
+        .stats {
+          gap: 16px;
+        }
+
+        .stat span {
+          font-size: 12px;
+        }
+
+        .card {
+          padding: 30px 26px 32px;
+        }
+
+        .formula {
+          font-size: 22px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .nav-cta {
+          display: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .halo,
+        .orb,
+        .zero i,
+        .ghost .down {
+          animation: none;
+        }
+
+        .reveal {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+
+        .cta,
+        .ghost,
+        .nav,
+        .veil {
+          transition: none;
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/landing-TrbZ6QiA.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/three-BADZquTA.js">
+    <link rel="modulepreload" crossorigin href="./assets/locale-BdBS8SZH.js">
+  </head>
+  <body>
+    <header class="nav" id="nav">
+      <div class="nav-inner">
+        <a class="nav-brand" href="./" aria-label="Math Cosmos 首页">
+          <span class="mark" aria-hidden="true">ζ</span>
+          <span>Math Cosmos</span>
+        </a>
+        <nav class="nav-links" aria-label="页面导航">
+          <a href="#numbers" data-i18n="navModels">模型</a>
+          <a href="#zeta" data-i18n="navStrip">临界带</a>
+          <a href="#experience" data-i18n="navExperience">体验</a>
+        </nav>
+        <div class="nav-actions">
+          <div class="lang" id="lang">
+            <button
+              class="lang-toggle"
+              id="lang-toggle"
+              type="button"
+              aria-haspopup="listbox"
+              aria-expanded="false"
+              aria-label="Change language"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="9"></circle>
+                <path
+                  d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"
+                ></path>
+              </svg>
+              <span class="lang-name" id="lang-name">中文</span>
+              <span class="lang-code" id="lang-code">中</span>
+              <span class="lang-chevron" aria-hidden="true">⌄</span>
+            </button>
+            <div
+              class="lang-menu"
+              id="lang-menu"
+              role="listbox"
+              aria-label="Language"
+              aria-hidden="true"
+              inert
+            >
+              <button type="button" role="option" data-locale="zh" aria-selected="true" lang="zh-CN">
+                <span>中文</span><small>ZH</small>
+              </button>
+              <button type="button" role="option" data-locale="en" aria-selected="false" lang="en">
+                <span>English</span><small>EN</small>
+              </button>
+              <button type="button" role="option" data-locale="ja" aria-selected="false" lang="ja">
+                <span>日本語</span><small>JA</small>
+              </button>
+              <button type="button" role="option" data-locale="ko" aria-selected="false" lang="ko">
+                <span>한국어</span><small>KO</small>
+              </button>
+              <button type="button" role="option" data-locale="de" aria-selected="false" lang="de">
+                <span>Deutsch</span><small>DE</small>
+              </button>
+              <button type="button" role="option" data-locale="fr" aria-selected="false" lang="fr">
+                <span>Français</span><small>FR</small>
+              </button>
+              <button type="button" role="option" data-locale="ru" aria-selected="false" lang="ru">
+                <span>Русский</span><small>RU</small>
+              </button>
+            </div>
+          </div>
+          <a
+            class="nav-github"
+            href="https://github.com/orderye/MathCosmos"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub repository"
+            title="GitHub repository"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.41-2.69 5.38-5.25 5.66.41.35.78 1.05.78 2.12 0 1.53-.01 2.76-.01 3.14 0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z" />
+            </svg>
+          </a>
+          <a class="nav-cta" href="app.html" data-enter>
+            <span data-i18n="navEnter">进入宇宙</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Riemann Hypothesis · 1859</p>
+          <h1 id="hero-title" data-i18n-html="heroTitle">每一个公式<br />都是一个<span class="grad">生命体</span>。</h1>
+          <p class="lede" data-i18n="heroLede">
+            从 ζ(s) 的临界带出发——四十类数学结构、一百一十四个独立生命体，在同一个三维宇宙里呼吸、巡游、彼此凝视。
+          </p>
+        </div>
+
+        <div class="stage" id="stage" aria-hidden="true">
+          <div class="halo"></div>
+          <div class="orb"></div>
+          <canvas id="hero-canvas"></canvas>
+          <span class="stage-meta tl">ζ(s) · Critical Strip</span>
+          <span class="stage-meta br">ℜ(s) = ½</span>
+        </div>
+
+        <div class="hero-actions">
+          <button
+            class="cta"
+            type="button"
+            data-enter
+            aria-label="进入 Math Cosmos 主体验"
+            data-i18n-aria="heroCtaLabel"
+          >
+            <span data-i18n="heroCta">进入宇宙</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="ghost" type="button" data-scroll="#numbers">
+            <span data-i18n="heroLearn">继续了解</span>
+            <span class="down" aria-hidden="true">↓</span>
+          </button>
+        </div>
+
+        <p class="scroll-hint" data-i18n="heroHint">点击任意位置 · 即刻跃迁</p>
+      </section>
+
+      <section class="section light" id="numbers">
+        <div class="inner">
+          <p class="section-eyebrow reveal">The Collection</p>
+          <h2 class="reveal" data-i18n-html="numbersTitle">四十种模型，<br />四十种生命体。</h2>
+          <div class="stats">
+            <div class="stat reveal" style="--d: 60ms">
+              <strong>40</strong>
+              <span data-i18n="numbersStat1">数学模型</span>
+              <small data-i18n="numbersStat1Note">混沌 · 拓扑 · 分形 · 高维 · 数论</small>
+            </div>
+            <div class="stat reveal" style="--d: 140ms">
+              <strong>114</strong>
+              <span data-i18n="numbersStat2">独立个体</span>
+              <small data-i18n="numbersStat2Note">各自拥有轨道、声纹与性格</small>
+            </div>
+            <div class="stat reveal" style="--d: 220ms">
+              <strong>3</strong>
+              <span data-i18n="numbersStat3">轨道层级</span>
+              <small data-i18n="numbersStat3Note">内环朝圣 · 中环洋流 · 外环深空</small>
+            </div>
+          </div>
+          <p class="footnote reveal" style="--d: 300ms" data-i18n="numbersFootnote">
+            从 Lorenz 吸引子到 Calabi–Yau 流形，从 Menger 海绵到 E8 晶格——每一类都由数据驱动生成，
+            而不是贴图伪装。它们同处一个引力场，遵循同一套天体力学。
+          </p>
+        </div>
+      </section>
+
+      <section class="section dark" id="zeta">
+        <div class="inner">
+          <p class="section-eyebrow reveal">The Centerpiece · M35</p>
+          <h2 class="reveal" data-i18n-html="zetaTitle">宇宙的主角，<br />是一条临界线。</h2>
+          <div class="formula reveal" aria-label="黎曼 zeta 函数的 Dirichlet eta 表达式">
+            <span>ζ(s)</span>
+            <span>=</span>
+            <span class="frac">
+              <span>1</span>
+              <span class="den">1 − 2<sup>1−s</sup></span>
+            </span>
+            <span>·</span>
+            <span>Σ</span>
+            <span style="font-size: 0.62em">n ≥ 1</span>
+            <span class="frac">
+              <span>(−1)<sup>n−1</sup></span>
+              <span class="den">n<sup>s</sup></span>
+            </span>
+          </div>
+          <p class="formula-note reveal" data-i18n="zetaNote">M35 · 黎曼 ζ 临界带复相丝带</p>
+          <p class="section-lede reveal" data-i18n="zetaLede">
+            黎曼猜想断言：ζ 函数的所有非平凡零点，都落在 ℜ(s) = ½ 这条线上。
+            主页中央的曲面正是这条临界带的复相可视化——曲面颜色随 arg ζ(s) 流转，
+            十颗纯白高能星核，对应前十个非平凡零点。
+          </p>
+          <div class="zeros reveal" aria-label="前十个非平凡零点" data-i18n-aria="zetaZerosLabel">
+            <span class="zero"><i style="--d: 0ms"></i>14.1347</span>
+            <span class="zero"><i style="--d: 420ms"></i>21.0220</span>
+            <span class="zero"><i style="--d: 840ms"></i>25.0109</span>
+            <span class="zero"><i style="--d: 1260ms"></i>30.4249</span>
+            <span class="zero"><i style="--d: 1680ms"></i>32.9351</span>
+            <span class="zero"><i style="--d: 2100ms"></i>37.5862</span>
+            <span class="zero"><i style="--d: 2520ms"></i>40.9187</span>
+            <span class="zero"><i style="--d: 2940ms"></i>43.3271</span>
+            <span class="zero"><i style="--d: 3360ms"></i>48.0052</span>
+            <span class="zero"><i style="--d: 3780ms"></i>49.7738</span>
+          </div>
+          <p class="footnote reveal" data-i18n="zetaFootnote">
+            曲面几何由 Dirichlet η 交错级数实时求解，零点位置写入顶点属性，由 shader 直接点亮——不是提前烘好的动画。
+          </p>
+        </div>
+      </section>
+
+      <section class="section light" id="experience">
+        <div class="inner">
+          <p class="section-eyebrow reveal">The Experience</p>
+          <h2 class="reveal" data-i18n-html="experienceTitle">身临其境，<br />置身宇内。</h2>
+          <div class="features">
+            <article class="card reveal" style="--d: 60ms">
+              <span class="icon" aria-hidden="true">6°</span>
+              <h3 data-i18n="experienceCard1Title">六自由度飞行</h3>
+              <p data-i18n="experienceCard1Body">无重力束缚的 6DoF 操控：环绕、俯冲、侧掠，穿过每一条曲面。黎曼巨兽会在 720 单位内减速转向，注视你的航线。</p>
+            </article>
+            <article class="card reveal" style="--d: 140ms">
+              <span class="icon" aria-hidden="true">◉</span>
+              <h3 data-i18n="experienceCard2Title">程序化空间音频</h3>
+              <p data-i18n="experienceCard2Body">每个模型都有自己的声纹。靠近它，音色、声像与多普勒随之改变——混沌、拓扑、高维、分形、量子，五个听感族群。</p>
+            </article>
+            <article class="card reveal" style="--d: 220ms">
+              <span class="icon" aria-hidden="true">ζ</span>
+              <h3 data-i18n="experienceCard3Title">自主行为层</h3>
+              <p data-i18n="experienceCard3Body">一百一十四个个体拥有独立的时钟、游荡半径与性格：好奇的会转头靠近，恐惧的会逃逸，冷漠的只按自己的轨道巡游。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section final">
+        <div class="inner">
+          <h2 class="reveal" data-i18n="finalTitle">现在，跃入宇宙。</h2>
+          <button class="cta reveal" type="button" data-enter style="--d: 80ms">
+            <span data-i18n="finalCta">进入 Math Cosmos</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </button>
+          <p class="footnote reveal" style="--d: 160ms" data-i18n="finalFootnote">
+            无需安装 · 浏览器直接运行 · 桌面端 WebGL 2 体验最佳
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span data-i18n="footerCopy">© 2026 Math Cosmos · 数学宇宙</span>
+        <span class="footer-links">
+          <a href="https://github.com/orderye/MathCosmos" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="app.html" data-enter data-i18n="footerEnter">进入主体验</a>
+          <a href="#hero" data-i18n="footerTop">回到顶部</a>
+        </span>
+      </div>
+    </footer>
+
+    <div class="veil" aria-hidden="true"></div>
+  </body>
+</html>
