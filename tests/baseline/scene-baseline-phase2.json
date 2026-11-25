@@ -1,0 +1,51 @@
+{
+  "capturedAt": "2026-11-25",
+  "phase": "Phase 2 音频/飞控拆分",
+  "tool": "ego-browser headless + vitest",
+  "scene": {
+    "creatures": 114,
+    "uniqueModelTypes": 40,
+    "shells": { "inner": 31, "main": 65, "outer": 18 }
+  },
+  "render": {
+    "programs": 40,
+    "drawCalls": 100,
+    "triangles": 341965
+  },
+  "cpu": {
+    "updateMsPerFrame": 0.363
+  },
+  "audio": {
+    "facadeLines": 108,
+    "modules": [
+      "VoicePool",
+      "LeviathanVoice",
+      "SpatialMixer",
+      "Ambience",
+      "DopplerService",
+      "Sfx",
+      "AudioBuffers",
+      "audioTypes"
+    ],
+    "graphBuilt": true,
+    "ctxStateHeadless": "suspended",
+    "errors": 0
+  },
+  "flight": {
+    "controllerLines": 126,
+    "modules": ["FlightInput", "ManualPilot", "WarpPilot", "OrbitEscort", "CameraRig", "FlightMath", "FlightTypes"],
+    "warpArrival": true,
+    "orbitRadiusStable": true,
+    "errors": 0
+  },
+  "runtime": {
+    "errors": 0,
+    "warpState": "ORBIT_LOCK",
+    "pickHandler": "function"
+  },
+  "tests": {
+    "vitestFiles": 4,
+    "vitestCases": 25
+  },
+  "note": "headless 下 AudioContext 因自动播放策略保持 suspended；真实用户手势路径走 unlock()/toggle()"
+}

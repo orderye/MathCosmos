@@ -1,0 +1,55 @@
+{
+  "capturedAt": "2026-11-25",
+  "phase": "Phase 5 性能与构建",
+  "tool": "vite build + ego-browser headless + vitest",
+  "bundle": {
+    "entry": { "file": "assets/index-*.js", "bytes": 181800, "budgetBytes": 700000 },
+    "totalJsBytes": 995000,
+    "totalJsBudgetBytes": 1250000,
+    "chunks": {
+      "index": 186150,
+      "three": 501720,
+      "katex": 261810,
+      "postprocessing": 69170
+    },
+    "manualChunks": ["three", "katex", "postprocessing"]
+  },
+  "performance": {
+    "batchCpuMs": 0.346,
+    "batchIterations": 200,
+    "emaUpdateMsObserved": 1.43,
+    "emaNote": "headless 单帧 performance.now 分辨率噪声，不作为预算口径",
+    "drawCalls": 104,
+    "triangles": 341971,
+    "programs": 40,
+    "systems": {
+      "leviathan": 0,
+      "navigation": 0.006,
+      "dust": 0,
+      "creatures": 0.342,
+      "lod": 0.001,
+      "callout": 0.005,
+      "audio": 0,
+      "hud": 0
+    }
+  },
+  "runtime": {
+    "creatures": 114,
+    "ready": 114,
+    "uniqueModelTypes": 40,
+    "initMsHeadless": 8044,
+    "initMsNote": "headless 调度抖动，实测 0.85–8.9s；前台真实设备更快",
+    "errors": 0,
+    "warpState": "ORBIT_LOCK"
+  },
+  "resourceAudit": {
+    "leftoversAfterDispose": 0,
+    "geometries": { "before": 130, "after": 10 },
+    "textures": { "before": 20, "after": 18 },
+    "errors": 0
+  },
+  "tests": {
+    "vitestFiles": 6,
+    "vitestCases": 28
+  }
+}

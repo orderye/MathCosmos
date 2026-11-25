@@ -1,0 +1,26 @@
+{
+  "capturedAt": "2026-11-25",
+  "tool": "ego-browser headless",
+  "url": "http://localhost:5173/",
+  "scene": {
+    "creatures": 114,
+    "uniqueModelTypes": 40,
+    "shells": { "inner": 31, "main": 65, "outer": 18 },
+    "codexEntries": 40,
+    "warpItems": 40
+  },
+  "render": {
+    "programs": 40,
+    "drawCalls": 97,
+    "triangles": 345370,
+    "allLod0": { "drawCalls": 135, "triangles": 912841 }
+  },
+  "cpu": {
+    "updateMsPerFrame": 0.353
+  },
+  "runtime": {
+    "errors": 0,
+    "headlessFps": 30.2,
+    "note": "headless 软件渲染，仅作回归基线，不代表真实 GPU 帧率"
+  }
+}

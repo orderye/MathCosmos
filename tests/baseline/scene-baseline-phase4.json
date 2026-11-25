@@ -1,0 +1,41 @@
+{
+  "capturedAt": "2026-11-25",
+  "phase": "Phase 4 资源生命周期",
+  "tool": "ego-browser headless + vitest",
+  "scene": {
+    "creatures": 114,
+    "uniqueModelTypes": 40,
+    "shells": { "inner": 31, "main": 65, "outer": 18 }
+  },
+  "spawn": {
+    "total": 114,
+    "initMsHeadless": 852,
+    "readyAfterSpawn": 114,
+    "remaining": 0,
+    "batchSize": 3,
+    "initialCount": 10,
+    "maxMsPerFrame": 4,
+    "progressEvent": "spawn-progress",
+    "hudCompletesToControlHint": true
+  },
+  "resourceAudit": {
+    "resourcesMissingBefore": 0,
+    "leftoversAfterDispose": 0,
+    "geometries": { "before": 137, "after": 10 },
+    "textures": { "before": 20, "after": 18 },
+    "errors": 0
+  },
+  "runtime": {
+    "errors": 0,
+    "drawCalls": 101,
+    "triangles": 341967
+  },
+  "tests": {
+    "vitestFiles": 5,
+    "vitestCases": 26
+  },
+  "notes": [
+    "渲染循环继续使用预分配临时向量/矩阵，未引入通用对象池以避免池化生命周期风险",
+    "发光 Sprite 纹理由 BaseMathCreature 静态共享；Gray-Scott FBO 仅 1 个实例"
+  ]
+}

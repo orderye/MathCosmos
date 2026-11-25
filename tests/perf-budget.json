@@ -1,0 +1,21 @@
+{
+  "scene": {
+    "creaturesMax": 120,
+    "uniqueModelTypes": 40,
+    "shells": { "inner": 31, "main": 65, "outer": 18 }
+  },
+  "render": {
+    "drawCallsMax": 160,
+    "trianglesMax": 1200000
+  },
+  "cpu": {
+    "updateMsMax": 1.5
+  },
+  "bundle": {
+    "entryJsMaxBytes": 700000,
+    "totalJsMaxBytes": 1250000
+  },
+  "runtime": {
+    "errorsMax": 0
+  }
+}

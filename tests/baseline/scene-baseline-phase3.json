@@ -1,0 +1,43 @@
+{
+  "capturedAt": "2026-11-25",
+  "phase": "Phase 3 模型层复用",
+  "tool": "ego-browser headless",
+  "scene": {
+    "creatures": 114,
+    "uniqueModelTypes": 40,
+    "shells": { "inner": 31, "main": 65, "outer": 18 },
+    "codexEntries": 40,
+    "warpItems": 40
+  },
+  "render": {
+    "programs": 40,
+    "drawCalls": 100,
+    "triangles": 341965,
+    "allLod0": { "drawCalls": 142, "triangles": 949225 }
+  },
+  "cpu": {
+    "updateMsPerFrame": 0.363
+  },
+  "runtime": {
+    "errors": 0,
+    "warpState": "ORBIT_LOCK",
+    "lod2HiddenParts": 0
+  },
+  "duplication": {
+    "modelFilesWithSetLOD": 0,
+    "modelFilesWithDispose": 0,
+    "modelFilesWithRawShaderMaterial": 1,
+    "modelFilesWithRotationCalls": 12,
+    "before": {
+      "setLOD": 27,
+      "dispose": 27,
+      "rawShaderMaterial": 23,
+      "rotationCalls": 18
+    }
+  },
+  "tests": {
+    "vitestFiles": 3,
+    "vitestCases": 19
+  },
+  "note": "headless 软件渲染，仅作回归基线，不代表真实 GPU 帧率"
+}

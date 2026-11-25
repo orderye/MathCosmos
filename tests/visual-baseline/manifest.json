@@ -1,0 +1,206 @@
+{
+  "capturedAt": "2026-11-25T07:52:27.901Z",
+  "count": 40,
+  "entries": [
+    {
+      "code": "M01",
+      "type": "lorenz",
+      "file": "M01-lorenz.png"
+    },
+    {
+      "code": "M02",
+      "type": "rossler",
+      "file": "M02-rossler.png"
+    },
+    {
+      "code": "M03",
+      "type": "aizawa",
+      "file": "M03-aizawa.png"
+    },
+    {
+      "code": "M04",
+      "type": "calabi-yau",
+      "file": "M04-calabi-yau.png"
+    },
+    {
+      "code": "M05",
+      "type": "klein",
+      "file": "M05-klein.png"
+    },
+    {
+      "code": "M06",
+      "type": "torus-knot",
+      "file": "M06-torus-knot.png"
+    },
+    {
+      "code": "M07",
+      "type": "mandelbulb",
+      "file": "M07-mandelbulb.png"
+    },
+    {
+      "code": "M08",
+      "type": "sierpinski",
+      "file": "M08-sierpinski.png"
+    },
+    {
+      "code": "M09",
+      "type": "hopf",
+      "file": "M09-hopf.png"
+    },
+    {
+      "code": "M10",
+      "type": "fourier",
+      "file": "M10-fourier.png"
+    },
+    {
+      "code": "M11",
+      "type": "harmonics",
+      "file": "M11-harmonics.png"
+    },
+    {
+      "code": "M12",
+      "type": "phyllotaxis",
+      "file": "M12-phyllotaxis.png"
+    },
+    {
+      "code": "M13",
+      "type": "thomas",
+      "file": "M13-thomas.png"
+    },
+    {
+      "code": "M14",
+      "type": "halvorsen",
+      "file": "M14-halvorsen.png"
+    },
+    {
+      "code": "M15",
+      "type": "chen-lee",
+      "file": "M15-chen-lee.png"
+    },
+    {
+      "code": "M16",
+      "type": "enneper",
+      "file": "M16-enneper.png"
+    },
+    {
+      "code": "M17",
+      "type": "boy",
+      "file": "M17-boy.png"
+    },
+    {
+      "code": "M18",
+      "type": "dini",
+      "file": "M18-dini.png"
+    },
+    {
+      "code": "M19",
+      "type": "helicoid-catenoid",
+      "file": "M19-helicoid-catenoid.png"
+    },
+    {
+      "code": "M20",
+      "type": "cell-24",
+      "file": "M20-cell-24.png"
+    },
+    {
+      "code": "M21",
+      "type": "clifford-torus",
+      "file": "M21-clifford-torus.png"
+    },
+    {
+      "code": "M22",
+      "type": "quaternion-julia",
+      "file": "M22-quaternion-julia.png"
+    },
+    {
+      "code": "M23",
+      "type": "apollonian",
+      "file": "M23-apollonian.png"
+    },
+    {
+      "code": "M24",
+      "type": "poincare",
+      "file": "M24-poincare.png"
+    },
+    {
+      "code": "M25",
+      "type": "gray-scott",
+      "file": "M25-gray-scott.png"
+    },
+    {
+      "code": "M26",
+      "type": "ulam-prime",
+      "file": "M26-ulam-prime.png"
+    },
+    {
+      "code": "M27",
+      "type": "hydrogen",
+      "file": "M27-hydrogen.png"
+    },
+    {
+      "code": "M28",
+      "type": "lissajous",
+      "file": "M28-lissajous.png"
+    },
+    {
+      "code": "M29",
+      "type": "gyroid",
+      "file": "M29-gyroid.png"
+    },
+    {
+      "code": "M30",
+      "type": "roman",
+      "file": "M30-roman.png"
+    },
+    {
+      "code": "M31",
+      "type": "menger",
+      "file": "M31-menger.png"
+    },
+    {
+      "code": "M32",
+      "type": "e8",
+      "file": "M32-e8.png"
+    },
+    {
+      "code": "M33",
+      "type": "kuramoto",
+      "file": "M33-kuramoto.png"
+    },
+    {
+      "code": "M34",
+      "type": "dadras",
+      "file": "M34-dadras.png"
+    },
+    {
+      "code": "M35",
+      "type": "zeta",
+      "file": "M35-zeta.png"
+    },
+    {
+      "code": "M36",
+      "type": "costa",
+      "file": "M36-costa.png"
+    },
+    {
+      "code": "M37",
+      "type": "quasicrystal",
+      "file": "M37-quasicrystal.png"
+    },
+    {
+      "code": "M38",
+      "type": "dipole",
+      "file": "M38-dipole.png"
+    },
+    {
+      "code": "M39",
+      "type": "abc-flow",
+      "file": "M39-abc-flow.png"
+    },
+    {
+      "code": "M40",
+      "type": "mobius-twisted",
+      "file": "M40-mobius-twisted.png"
+    }
+  ]
+}
