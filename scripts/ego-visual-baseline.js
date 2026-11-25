@@ -71,7 +71,7 @@ const entries = await page.evaluate(() => {
       }
     });
   }
-  for (const id of ['hud', 'warp-selector', 'codex-drawer', 'callout-canvas', 'flight-status', 'crosshair']) {
+  for (const id of ['hud', 'warp-selector', 'codex-drawer', 'callout-canvas', 'flight-status', 'crosshair', 'app-lang']) {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   }
@@ -82,21 +82,11 @@ const entries = await page.evaluate(() => {
   for (const cr of c.creatures) {
     if (seen.has(cr.config.modelType)) continue;
     seen.add(cr.config.modelType);
-    const sameType = c.creatures.filter((x) => x.config.modelType === cr.config.modelType);
-    let best = sameType[0];
-    let bestDelta = Infinity;
-    for (const candidate of sameType) {
-      if (!candidate.alive) continue;
-      const delta = Math.abs(candidate.lifecycle.progress - 0.5);
-      if (delta < bestDelta) {
-        bestDelta = delta;
-        best = candidate;
-      }
-    }
+    // 固定取每类第一个槽位；生命周期与行为时钟随后统一重置，避免相位漂移
     result.push({
       code: cr.config.code,
       type: cr.config.modelType,
-      slot: c.creatures.indexOf(best),
+      slot: c.creatures.indexOf(cr),
     });
   }
   return result.sort((a, b) => a.code.localeCompare(b.code));
@@ -134,6 +124,10 @@ for (const entry of chunk) {
     c.dust.mesh.visible = false;
     target.group.visible = true;
     target.setLOD(0);
+    // 固定行为/生命周期/动画起点，保证同一构建每次截图取景一致
+    target.behavior.reset(target.config.orbit.seed);
+    target.lifecycle.seek(0.5);
+    target.update(0, 0, c.engine.camera.position, c.flight.velocity);
 
     const world = target.group.position.clone().add(c.engine.universeRoot.position);
     const Vec3 = c.flight.position.constructor;

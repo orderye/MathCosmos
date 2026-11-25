@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-25T11:40:55.413Z",
+  "capturedAt": "2026-11-25T12:07:54.238Z",
   "count": 40,
   "entries": [
     {
@@ -41,19 +41,19 @@
     {
       "code": "M07",
       "type": "mandelbulb",
-      "slot": 19,
+      "slot": 18,
       "file": "M07-mandelbulb.png"
     },
     {
       "code": "M08",
       "type": "sierpinski",
-      "slot": 22,
+      "slot": 21,
       "file": "M08-sierpinski.png"
     },
     {
       "code": "M09",
       "type": "hopf",
-      "slot": 25,
+      "slot": 24,
       "file": "M09-hopf.png",
       "tolerance": {
         "mean": 70,
@@ -95,25 +95,25 @@
     {
       "code": "M14",
       "type": "halvorsen",
-      "slot": 40,
+      "slot": 39,
       "file": "M14-halvorsen.png"
     },
     {
       "code": "M15",
       "type": "chen-lee",
-      "slot": 43,
+      "slot": 42,
       "file": "M15-chen-lee.png"
     },
     {
       "code": "M16",
       "type": "enneper",
-      "slot": 46,
+      "slot": 45,
       "file": "M16-enneper.png"
     },
     {
       "code": "M17",
       "type": "boy",
-      "slot": 49,
+      "slot": 48,
       "file": "M17-boy.png"
     },
     {
@@ -131,37 +131,37 @@
     {
       "code": "M20",
       "type": "cell-24",
-      "slot": 58,
+      "slot": 57,
       "file": "M20-cell-24.png"
     },
     {
       "code": "M21",
       "type": "clifford-torus",
-      "slot": 61,
+      "slot": 60,
       "file": "M21-clifford-torus.png"
     },
     {
       "code": "M22",
       "type": "quaternion-julia",
-      "slot": 64,
+      "slot": 63,
       "file": "M22-quaternion-julia.png"
     },
     {
       "code": "M23",
       "type": "apollonian",
-      "slot": 67,
+      "slot": 66,
       "file": "M23-apollonian.png"
     },
     {
       "code": "M24",
       "type": "poincare",
-      "slot": 70,
+      "slot": 69,
       "file": "M24-poincare.png"
     },
     {
       "code": "M25",
       "type": "gray-scott",
-      "slot": 73,
+      "slot": 72,
       "file": "M25-gray-scott.png"
     },
     {
@@ -185,7 +185,7 @@
     {
       "code": "M29",
       "type": "gyroid",
-      "slot": 85,
+      "slot": 84,
       "file": "M29-gyroid.png"
     },
     {
@@ -197,7 +197,7 @@
     {
       "code": "M31",
       "type": "menger",
-      "slot": 91,
+      "slot": 90,
       "file": "M31-menger.png"
     },
     {
@@ -237,7 +237,7 @@
     {
       "code": "M37",
       "type": "quasicrystal",
-      "slot": 109,
+      "slot": 108,
       "file": "M37-quasicrystal.png"
     },
     {
@@ -249,7 +249,7 @@
     {
       "code": "M39",
       "type": "abc-flow",
-      "slot": 115,
+      "slot": 114,
       "file": "M39-abc-flow.png"
     },
     {
