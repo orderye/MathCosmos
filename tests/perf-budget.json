@@ -2,7 +2,7 @@
   "scene": {
     "creaturesMax": 120,
     "uniqueModelTypes": 40,
-    "shells": { "inner": 31, "main": 65, "outer": 18 }
+    "shells": { "inner": 30, "main": 63, "outer": 27 }
   },
   "render": {
     "drawCallsMax": 160,
@@ -13,6 +13,7 @@
   },
   "bundle": {
     "entryJsMaxBytes": 700000,
+    "landingEntryJsMaxBytes": 150000,
     "totalJsMaxBytes": 1250000
   },
   "runtime": {

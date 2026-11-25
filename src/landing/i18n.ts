@@ -1,0 +1,421 @@
+export type Locale = 'zh' | 'en' | 'ja' | 'ko' | 'de' | 'fr' | 'ru';
+
+export const STORAGE_KEY = 'math-cosmos-locale';
+
+export interface LanguageMeta {
+  code: Locale;
+  name: string;
+  short: string;
+  htmlLang: string;
+}
+
+export const LANGUAGES: LanguageMeta[] = [
+  { code: 'zh', name: '中文', short: '中', htmlLang: 'zh-CN' },
+  { code: 'en', name: 'English', short: 'EN', htmlLang: 'en' },
+  { code: 'ja', name: '日本語', short: '日', htmlLang: 'ja' },
+  { code: 'ko', name: '한국어', short: '한', htmlLang: 'ko' },
+  { code: 'de', name: 'Deutsch', short: 'DE', htmlLang: 'de' },
+  { code: 'fr', name: 'Français', short: 'FR', htmlLang: 'fr' },
+  { code: 'ru', name: 'Русский', short: 'RU', htmlLang: 'ru' },
+];
+
+const ZH = {
+  title: 'Math Cosmos · 数学宇宙',
+  description:
+    '从黎曼 ζ 函数的临界带出发——四十类数学结构、一百一十四个独立生命体，在同一个三维宇宙里呼吸与巡游。',
+  navModels: '模型',
+  navStrip: '临界带',
+  navExperience: '体验',
+  navEnter: '进入宇宙',
+  heroTitle: '每一个公式<br>都是一个<span class="grad">生命体</span>。',
+  heroLede:
+    '从 ζ(s) 的临界带出发——四十类数学结构、一百一十四个独立生命体，在同一个三维宇宙里呼吸、巡游、彼此凝视。',
+  heroCta: '进入宇宙',
+  heroCtaLabel: '进入 Math Cosmos 主体验',
+  heroLearn: '继续了解',
+  heroHint: '点击任意位置 · 即刻跃迁',
+  numbersTitle: '四十种模型，<br>四十种生命体。',
+  numbersStat1: '数学模型',
+  numbersStat1Note: '混沌 · 拓扑 · 分形 · 高维 · 数论',
+  numbersStat2: '独立个体',
+  numbersStat2Note: '各自拥有轨道、声纹与性格',
+  numbersStat3: '轨道层级',
+  numbersStat3Note: '内环朝圣 · 中环洋流 · 外环深空',
+  numbersFootnote:
+    '从 Lorenz 吸引子到 Calabi–Yau 流形，从 Menger 海绵到 E8 晶格——每一类都由数据驱动生成，而不是贴图伪装。它们同处一个引力场，遵循同一套天体力学。',
+  zetaTitle: '宇宙的主角，<br>是一条临界线。',
+  zetaNote: 'M35 · 黎曼 ζ 临界带复相丝带',
+  zetaLede:
+    '黎曼猜想断言：ζ 函数的所有非平凡零点，都落在 ℜ(s) = ½ 这条线上。主页中央的曲面正是这条临界带的复相可视化——曲面颜色随 arg ζ(s) 流转，十颗纯白高能星核，对应前十个非平凡零点。',
+  zetaZerosLabel: '前十个非平凡零点',
+  zetaFootnote:
+    '曲面几何由 Dirichlet η 交错级数实时求解，零点位置写入顶点属性，由 shader 直接点亮——不是提前烘好的动画。',
+  experienceTitle: '身临其境，<br>置身宇内。',
+  experienceCard1Title: '六自由度飞行',
+  experienceCard1Body:
+    '无重力束缚的 6DoF 操控：环绕、俯冲、侧掠，穿过每一条曲面。黎曼巨兽会在 720 单位内减速转向，注视你的航线。',
+  experienceCard2Title: '程序化空间音频',
+  experienceCard2Body:
+    '每个模型都有自己的声纹。靠近它，音色、声像与多普勒随之改变——混沌、拓扑、高维、分形、量子，五个听感族群。',
+  experienceCard3Title: '自主行为层',
+  experienceCard3Body:
+    '一百一十四个个体拥有独立的时钟、游荡半径与性格：好奇的会转头靠近，恐惧的会逃逸，冷漠的只按自己的轨道巡游。',
+  finalTitle: '现在，跃入宇宙。',
+  finalCta: '进入 Math Cosmos',
+  finalFootnote: '无需安装 · 浏览器直接运行 · 桌面端 WebGL 2 体验最佳',
+  footerCopy: '© 2026 Math Cosmos · 数学宇宙',
+  footerEnter: '进入主体验',
+  footerTop: '回到顶部',
+} as const;
+
+export type CopyKey = keyof typeof ZH;
+
+const EN: Record<CopyKey, string> = {
+  title: 'Math Cosmos · A Mathematical Universe',
+  description:
+    'From the critical strip of the Riemann ζ function — forty mathematical structures and a hundred and fourteen living beings, breathing and wandering in one three-dimensional cosmos.',
+  navModels: 'Models',
+  navStrip: 'Critical Strip',
+  navExperience: 'Experience',
+  navEnter: 'Enter the Cosmos',
+  heroTitle: 'Every formula<br>is a <span class="grad">living thing</span>.',
+  heroLede:
+    'From the critical strip of ζ(s) — forty mathematical structures, a hundred and fourteen living beings, breathing, wandering, and regarding one another inside a single three-dimensional cosmos.',
+  heroCta: 'Enter the Cosmos',
+  heroCtaLabel: 'Enter the Math Cosmos experience',
+  heroLearn: 'Learn more',
+  heroHint: 'Click anywhere · Leap in',
+  numbersTitle: 'Forty models,<br>forty living things.',
+  numbersStat1: 'Mathematical models',
+  numbersStat1Note: 'Chaos · Topology · Fractals · Higher dimensions · Number theory',
+  numbersStat2: 'Living beings',
+  numbersStat2Note: 'Each with its own orbit, voice, and temperament',
+  numbersStat3: 'Orbital shells',
+  numbersStat3Note: 'Inner pilgrimage · Middle currents · Outer deep space',
+  numbersFootnote:
+    'From the Lorenz attractor to Calabi–Yau manifolds, from the Menger sponge to the E8 lattice — every structure is generated from data, not disguised with textures. All of them share one gravitational field and one set of celestial mechanics.',
+  zetaTitle: 'The protagonist of the cosmos<br>is a critical line.',
+  zetaNote: 'M35 · Riemann ζ critical strip',
+  zetaLede:
+    'The Riemann Hypothesis asserts that every non-trivial zero of ζ lies on the line ℜ(s) = ½. The surface at the center of this page is a complex-phase visualization of that strip — its color follows arg ζ(s), and ten white cores mark the first ten non-trivial zeros.',
+  zetaZerosLabel: 'The first ten non-trivial zeros',
+  zetaFootnote:
+    'The surface is solved in real time from the Dirichlet eta alternating series; zero positions are written into vertex attributes and lit directly by the shader — not a pre-baked animation.',
+  experienceTitle: 'Step inside.<br>Become part of it.',
+  experienceCard1Title: 'Six degrees of freedom',
+  experienceCard1Body:
+    'Unbound 6DoF control: orbit, dive, and sweep past every surface. Within 720 units, the Riemann leviathan slows, turns, and watches your flight path.',
+  experienceCard2Title: 'Procedural spatial audio',
+  experienceCard2Body:
+    'Every model has its own voice. Move closer and timbre, panning, and Doppler shift respond — five families: chaos, topology, higher dimensions, fractals, and quantum.',
+  experienceCard3Title: 'An autonomous behavior layer',
+  experienceCard3Body:
+    'A hundred and fourteen beings keep independent clocks, wandering radii, and temperaments: the curious turn toward you, the fearful flee, the indifferent stay on their own orbit.',
+  finalTitle: 'Now, leap into the cosmos.',
+  finalCta: 'Enter Math Cosmos',
+  finalFootnote: 'No install · Runs in the browser · Best with WebGL 2 on desktop',
+  footerCopy: '© 2026 Math Cosmos',
+  footerEnter: 'Enter the experience',
+  footerTop: 'Back to top',
+};
+
+const JA: Record<CopyKey, string> = {
+  title: 'Math Cosmos · 数学の宇宙',
+  description:
+    'リーマン ζ 関数の臨界帯から——40 種の数学的構造と 114 の生命体が、ひとつの三次元宇宙で呼吸し、巡っています。',
+  navModels: 'モデル',
+  navStrip: '臨界帯',
+  navExperience: '体験',
+  navEnter: '宇宙へ',
+  heroTitle: 'すべての公式は<br>ひとつの<span class="grad">生命体</span>。',
+  heroLede:
+    'ζ(s) の臨界帯から——40 種の数学的構造と 114 の独立した生命体が、ひとつの三次元宇宙で呼吸し、巡り、見つめ合っています。',
+  heroCta: '宇宙へ',
+  heroCtaLabel: 'Math Cosmos の体験へ',
+  heroLearn: '詳しく見る',
+  heroHint: 'どこでもクリック · 宇宙へ',
+  numbersTitle: '40 種のモデル、<br>40 種の生命体。',
+  numbersStat1: '数学モデル',
+  numbersStat1Note: 'カオス · トポロジー · フラクタル · 高次元 · 数論',
+  numbersStat2: '独立した個体',
+  numbersStat2Note: 'それぞれの軌道、声、性格をもつ',
+  numbersStat3: '軌道階層',
+  numbersStat3Note: '内環の巡礼 · 中環の海流 · 外環の深宇宙',
+  numbersFootnote:
+    'ローレンツ・アトラクターから Calabi–Yau 多様体、メンガー・スポンジから E8 格子まで——すべてがデータから生成され、テクスチャで偽装されていません。同じ重力場と同じ天体力学を共有しています。',
+  zetaTitle: '宇宙の主役は、<br>一本の臨界線。',
+  zetaNote: 'M35 · リーマン ζ 臨界帯',
+  zetaLede:
+    'リーマン予想は、ζ 関数のすべての非自明な零点が ℜ(s) = ½ の線上にあると主張します。このページ中央の曲面は、その臨界帯の複素位相を可視化したもの——色は arg ζ(s) に従って流れ、10 個の白い核が最初の 10 個の零点を示します。',
+  zetaZerosLabel: '最初の 10 個の非自明な零点',
+  zetaFootnote:
+    '曲面はディリクレの η 交代級数からリアルタイムに解かれ、零点の位置は頂点属性に書き込まれ、シェーダーが直接光らせます——事前に焼き込んだアニメーションではありません。',
+  experienceTitle: 'その場に立つ。<br>宇宙の内側へ。',
+  experienceCard1Title: '6 自由度の飛行',
+  experienceCard1Body:
+    '重力に縛られない 6DoF 操作：周回、急降下、側方へすれ抜ける。720 単位以内でリーマンの巨獣が減速し、向きを変え、あなたの航路を見つめます。',
+  experienceCard2Title: 'プロシージャル空間オーディオ',
+  experienceCard2Body:
+    'すべてのモデルに固有の声があります。近づくほど、音色、定位、ドップラーが変化——カオス、トポロジー、高次元、フラクタル、量子の 5 つの聴感ファミリー。',
+  experienceCard3Title: '自律行動レイヤー',
+  experienceCard3Body:
+    '114 の個体がそれぞれの時計、放浪半径、性格を持ちます。好奇心の強い個体は振り向いて近づき、恐れている個体は逃げ、無関心な個体は自分の軌道を巡ります。',
+  finalTitle: 'さあ、宇宙へ飛び込もう。',
+  finalCta: 'Math Cosmos へ',
+  finalFootnote: 'インストール不要 · ブラウザで動作 · デスクトップの WebGL 2 が最適',
+  footerCopy: '© 2026 Math Cosmos',
+  footerEnter: '体験をはじめる',
+  footerTop: 'トップへ',
+};
+
+const KO: Record<CopyKey, string> = {
+  title: 'Math Cosmos · 수학 우주',
+  description:
+    '리만 ζ 함수의 임계대에서——40가지 수학적 구조와 114개의 생명체가 하나의 3차원 우주에서 숨 쉬고 유영합니다.',
+  navModels: '모델',
+  navStrip: '임계대',
+  navExperience: '체험',
+  navEnter: '우주로',
+  heroTitle: '모든 공식은<br>하나의 <span class="grad">생명체</span>.',
+  heroLede:
+    'ζ(s)의 임계대에서 시작해——40가지 수학적 구조와 114개의 독립된 생명체가 하나의 3차원 우주에서 숨 쉬고, 유영하며, 서로를 바라봅니다.',
+  heroCta: '우주로',
+  heroCtaLabel: 'Math Cosmos 체험으로 들어가기',
+  heroLearn: '더 알아보기',
+  heroHint: '어디든 클릭 · 우주로',
+  numbersTitle: '40가지 모델,<br>40가지 생명체.',
+  numbersStat1: '수학 모델',
+  numbersStat1Note: '카오스 · 위상수학 · 프랙털 · 고차원 · 정수론',
+  numbersStat2: '독립된 개체',
+  numbersStat2Note: '각자의 궤도, 목소리, 성격을 지님',
+  numbersStat3: '궤도 계층',
+  numbersStat3Note: '내환의 순례 · 중환의 해류 · 외환의 심우주',
+  numbersFootnote:
+    '로렌츠 어트랙터에서 Calabi–Yau 다양체까지, 멩거 스펀지에서 E8 격자까지——모든 구조는 데이터로 생성되며 텍스처로 위장하지 않습니다. 모두 하나의 중력장과 하나의 천체역학을 공유합니다.',
+  zetaTitle: '우주의 주인공은<br>하나의 임계선.',
+  zetaNote: 'M35 · 리만 ζ 임계대',
+  zetaLede:
+    '리만 가설은 ζ 함수의 모든 비자명한 영점이 ℜ(s) = ½ 선 위에 있다고 주장합니다. 이 페이지 중앙의 곡면은 그 임계대의 복소 위상을 시각화한 것으로, 색은 arg ζ(s)를 따라 흐르고 10개의 흰 핵이 처음 10개의 영점을 표시합니다.',
+  zetaZerosLabel: '처음 10개의 비자명한 영점',
+  zetaFootnote:
+    '곡면은 디리클레 η 교대급수로 실시간 계산되며, 영점 위치는 정점 속성에 기록되어 셰이더가 직접 밝힙니다——미리 구운 애니메이션이 아닙니다.',
+  experienceTitle: '그 안에 서다.<br>우주 속으로.',
+  experienceCard1Title: '6자유도 비행',
+  experienceCard1Body:
+    '중력에 얽매이지 않는 6DoF 조작: 선회하고, 급강하하고, 곁을 스쳐 지나갑니다. 720 단위 안에서 리만 거수가 속도를 줄이고 방향을 틀어 당신의 항로를 바라봅니다.',
+  experienceCard2Title: '절차적 공간 오디오',
+  experienceCard2Body:
+    '모든 모델에는 고유의 목소리가 있습니다. 가까이 가면 음색, 패닝, 도플러가 함께 변합니다——카오스, 위상, 고차원, 프랙털, 양자의 다섯 청각 계열.',
+  experienceCard3Title: '자율 행동 레이어',
+  experienceCard3Body:
+    '114개의 개체가 각자의 시계, 배회 반경, 성격을 가집니다. 호기심 많은 개체는 돌아보고 다가오며, 두려운 개체는 달아나고, 무관심한 개체는 자기 궤도를 돕니다.',
+  finalTitle: '이제, 우주로 뛰어드세요.',
+  finalCta: 'Math Cosmos 입장',
+  finalFootnote: '설치 불필요 · 브라우저에서 실행 · 데스크톱 WebGL 2 권장',
+  footerCopy: '© 2026 Math Cosmos',
+  footerEnter: '체험 시작하기',
+  footerTop: '맨 위로',
+};
+
+const DE: Record<CopyKey, string> = {
+  title: 'Math Cosmos · Ein mathematisches Universum',
+  description:
+    'Von der kritischen Geraden der Riemannschen ζ-Funktion — vierzig mathematische Strukturen und hundertvierzehn Lebewesen, die in einem dreidimensionalen Kosmos atmen und wandern.',
+  navModels: 'Modelle',
+  navStrip: 'Kritischer Streifen',
+  navExperience: 'Erlebnis',
+  navEnter: 'Ins Universum',
+  heroTitle: 'Jede Formel<br>ist ein <span class="grad">Lebewesen</span>.',
+  heroLede:
+    'Von der kritischen Geraden von ζ(s) aus — vierzig mathematische Strukturen, hundertvierzehn eigenständige Lebewesen, die in einem dreidimensionalen Kosmos atmen, wandern und einander betrachten.',
+  heroCta: 'Ins Universum',
+  heroCtaLabel: 'Das Math-Cosmos-Erlebnis betreten',
+  heroLearn: 'Mehr erfahren',
+  heroHint: 'Überall klicken · Hineinspringen',
+  numbersTitle: 'Vierzig Modelle,<br>vierzig Lebewesen.',
+  numbersStat1: 'Mathematische Modelle',
+  numbersStat1Note: 'Chaos · Topologie · Fraktale · Höhere Dimensionen · Zahlentheorie',
+  numbersStat2: 'Eigenständige Wesen',
+  numbersStat2Note: 'Jedes mit eigener Umlaufbahn, Stimme und Temperament',
+  numbersStat3: 'Orbitale Ebenen',
+  numbersStat3Note: 'Innere Pilgerfahrt · Mittlere Strömungen · Äußerer Weltraum',
+  numbersFootnote:
+    'Vom Lorenz-Attraktor bis zu Calabi–Yau-Mannigfaltigkeiten, vom Menger-Schwamm bis zum E8-Gitter — jede Struktur wird aus Daten erzeugt, nicht mit Texturen vorgetäuscht. Alle teilen ein Gravitationsfeld und dieselbe Himmelsmechanik.',
+  zetaTitle: 'Im Zentrum des Kosmos<br>steht eine kritische Linie.',
+  zetaNote: 'M35 · Riemanns ζ-kritischer Streifen',
+  zetaLede:
+    'Die Riemannsche Vermutung besagt, dass alle nichttrivialen Nullstellen von ζ auf der Geraden ℜ(s) = ½ liegen. Die Fläche in der Mitte dieser Seite ist eine komplexe Phasenvisualisierung dieses Streifens — ihre Farbe folgt arg ζ(s), und zehn weiße Kerne markieren die ersten zehn Nullstellen.',
+  zetaZerosLabel: 'Die ersten zehn nichttrivialen Nullstellen',
+  zetaFootnote:
+    'Die Fläche wird in Echtzeit aus der alternierenden Dirichlet-η-Reihe berechnet; die Nullstellen werden in Vertex-Attribute geschrieben und vom Shader direkt beleuchtet — keine vorgerenderte Animation.',
+  experienceTitle: 'Mittendrin.<br>Mitten im Universum.',
+  experienceCard1Title: 'Sechs Freiheitsgrade',
+  experienceCard1Body:
+    'Ungebundene 6DoF-Steuerung: umkreisen, tauchen, vorbeistreifen. Innerhalb von 720 Einheiten bremst der Riemann-Leviathan ab, dreht sich und beobachtet deine Flugbahn.',
+  experienceCard2Title: 'Prozedurales Raumklang-Audio',
+  experienceCard2Body:
+    'Jedes Modell hat seine eigene Stimme. Komm näher, und Klangfarbe, Panorama und Doppler ändern sich — fünf Familien: Chaos, Topologie, höhere Dimensionen, Fraktale und Quanten.',
+  experienceCard3Title: 'Autonome Verhaltensebene',
+  experienceCard3Body:
+    'Hundertvierzehn Wesen besitzen eigene Uhren, Wanderradien und Temperamente: Neugierige drehen sich zu dir, Ängstliche fliehen, Gleichgültige bleiben auf ihrer Bahn.',
+  finalTitle: 'Jetzt ins Universum eintauchen.',
+  finalCta: 'Math Cosmos betreten',
+  finalFootnote: 'Keine Installation · Läuft im Browser · Am besten mit WebGL 2 am Desktop',
+  footerCopy: '© 2026 Math Cosmos',
+  footerEnter: 'Erlebnis betreten',
+  footerTop: 'Nach oben',
+};
+
+const FR: Record<CopyKey, string> = {
+  title: 'Math Cosmos · Un univers mathématique',
+  description:
+    'Depuis la bande critique de la fonction ζ de Riemann — quarante structures mathématiques et cent quatorze êtres vivants qui respirent et errent dans un même cosmos en trois dimensions.',
+  navModels: 'Modèles',
+  navStrip: 'Bande critique',
+  navExperience: 'Expérience',
+  navEnter: "Entrer dans l'univers",
+  heroTitle: 'Chaque formule<br>est un <span class="grad">être vivant</span>.',
+  heroLede:
+    'Depuis la bande critique de ζ(s) — quarante structures mathématiques, cent quatorze êtres vivants qui respirent, errent et se contemplent dans un même cosmos en trois dimensions.',
+  heroCta: "Entrer dans l'univers",
+  heroCtaLabel: "Entrer dans l'expérience Math Cosmos",
+  heroLearn: 'En savoir plus',
+  heroHint: "Cliquez n'importe où · Plongez",
+  numbersTitle: 'Quarante modèles,<br>quarante êtres vivants.',
+  numbersStat1: 'Modèles mathématiques',
+  numbersStat1Note: 'Chaos · Topologie · Fractales · Dimensions supérieures · Théorie des nombres',
+  numbersStat2: 'Êtres indépendants',
+  numbersStat2Note: 'Chacun avec son orbite, sa voix et son tempérament',
+  numbersStat3: 'Niveaux orbitaux',
+  numbersStat3Note: 'Pèlerinage intérieur · Courants médians · Espace lointain',
+  numbersFootnote:
+    "De l'attracteur de Lorenz aux variétés de Calabi–Yau, de l'éponge de Menger au réseau E8 — chaque structure est générée à partir de données, sans trompe-l'œil de textures. Toutes partagent un même champ gravitationnel et une même mécanique céleste.",
+  zetaTitle: 'Au cœur du cosmos,<br>une ligne critique.',
+  zetaNote: 'M35 · Bande critique de Riemann ζ',
+  zetaLede:
+    "L'hypothèse de Riemann affirme que tous les zéros non triviaux de ζ se trouvent sur la droite ℜ(s) = ½. La surface au centre de cette page est une visualisation de la phase complexe de cette bande — sa couleur suit arg ζ(s), et dix cœurs blancs marquent les dix premiers zéros.",
+  zetaZerosLabel: 'Les dix premiers zéros non triviaux',
+  zetaFootnote:
+    'La surface est résolue en temps réel à partir de la série alternée de Dirichlet η ; la position des zéros est écrite dans les attributs de sommets et éclairée directement par le shader — pas une animation précalculée.',
+  experienceTitle: "Entrez dans la scène.<br>À l'intérieur de l'univers.",
+  experienceCard1Title: 'Six degrés de liberté',
+  experienceCard1Body:
+    'Un contrôle 6DoF sans entraves : orbiter, plonger, frôler chaque surface. À moins de 720 unités, le léviathan de Riemann ralentit, se tourne et observe votre trajectoire.',
+  experienceCard2Title: 'Audio spatial procédural',
+  experienceCard2Body:
+    'Chaque modèle possède sa propre voix. Approchez-vous : timbre, panoramique et effet Doppler évoluent — cinq familles : chaos, topologie, dimensions supérieures, fractales et quantique.',
+  experienceCard3Title: 'Une couche de comportement autonome',
+  experienceCard3Body:
+    'Cent quatorze êtres ont leurs propres horloges, rayons d’errance et tempéraments : les curieux se tournent vers vous, les craintifs fuient, les indifférents suivent leur orbite.',
+  finalTitle: "Maintenant, plongez dans l'univers.",
+  finalCta: 'Ouvrir Math Cosmos',
+  finalFootnote:
+    'Sans installation · Fonctionne dans le navigateur · Idéal avec WebGL 2 sur ordinateur',
+  footerCopy: '© 2026 Math Cosmos',
+  footerEnter: "Entrer dans l'expérience",
+  footerTop: 'Retour en haut',
+};
+
+const RU: Record<CopyKey, string> = {
+  title: 'Math Cosmos · Математическая вселенная',
+  description:
+    'От критической полосы дзета-функции Римана — сорок математических структур и сто четырнадцать живых существ, дышащих и странствующих в одном трёхмерном космосе.',
+  navModels: 'Модели',
+  navStrip: 'Критическая полоса',
+  navExperience: 'Впечатления',
+  navEnter: 'Войти во вселенную',
+  heroTitle: 'Каждая формула —<br>это <span class="grad">живое существо</span>.',
+  heroLede:
+    'От критической полосы ζ(s) — сорок математических структур, сто четырнадцать независимых существ дышат, странствуют и смотрят друг на друга в одном трёхмерном космосе.',
+  heroCta: 'Войти во вселенную',
+  heroCtaLabel: 'Войти в мир Math Cosmos',
+  heroLearn: 'Узнать больше',
+  heroHint: 'Нажмите где угодно · Внутрь',
+  numbersTitle: 'Сорок моделей,<br>сорок живых существ.',
+  numbersStat1: 'Математические модели',
+  numbersStat1Note: 'Хаос · Топология · Фракталы · Высшие измерения · Теория чисел',
+  numbersStat2: 'Независимые существа',
+  numbersStat2Note: 'У каждого своя орбита, голос и характер',
+  numbersStat3: 'Орбитальные уровни',
+  numbersStat3Note: 'Внутреннее паломничество · Средние течения · Внешний дальний космос',
+  numbersFootnote:
+    'От аттрактора Лоренца до многообразий Калаби–Яу, от губки Менгера до решётки E8 — каждая структура генерируется из данных, а не маскируется текстурами. Все они делят одно гравитационное поле и одну небесную механику.',
+  zetaTitle: 'Главный герой космоса —<br>критическая линия.',
+  zetaNote: 'M35 · Критическая полоса дзета-функции Римана',
+  zetaLede:
+    'Гипотеза Римана утверждает, что все нетривиальные нули ζ лежат на прямой ℜ(s) = ½. Поверхность в центре этой страницы — визуализация комплексной фазы этой полосы: её цвет следует за arg ζ(s), а десять белых ядер отмечают первые десять нулей.',
+  zetaZerosLabel: 'Первые десять нетривиальных нулей',
+  zetaFootnote:
+    'Поверхность рассчитывается в реальном времени по знакочередующемуся ряду Дирихле η; положения нулей записываются в атрибуты вершин и подсвечиваются шейдером напрямую — это не заранее отрендеренная анимация.',
+  experienceTitle: 'Окажитесь внутри.<br>В самом космосе.',
+  experienceCard1Title: 'Шесть степеней свободы',
+  experienceCard1Body:
+    'Свободное управление 6DoF: облёт, пикирование, скольжение мимо поверхностей. В пределах 720 единиц левиафан Римана замедляется, поворачивается и следит за вашей траекторией.',
+  experienceCard2Title: 'Процедурный пространственный звук',
+  experienceCard2Body:
+    'У каждой модели свой голос. Приблизьтесь — тембр, панорама и эффект Доплера меняются: пять семейств — хаос, топология, высшие измерения, фракталы и кванты.',
+  experienceCard3Title: 'Слой автономного поведения',
+  experienceCard3Body:
+    'Сто четырнадцать существ имеют собственные часы, радиусы блуждания и характеры: любопытные поворачиваются к вам, пугливые убегают, равнодушные идут по своей орбите.',
+  finalTitle: 'Теперь — в космос.',
+  finalCta: 'Открыть Math Cosmos',
+  finalFootnote: 'Без установки · Работает в браузере · Лучше всего с WebGL 2 на компьютере',
+  footerCopy: '© 2026 Math Cosmos',
+  footerEnter: 'Войти в мир',
+  footerTop: 'Наверх',
+};
+
+export const COPY: Record<Locale, Record<CopyKey, string>> = {
+  zh: ZH,
+  en: EN,
+  ja: JA,
+  ko: KO,
+  de: DE,
+  fr: FR,
+  ru: RU,
+};
+
+const SUPPORTED = new Set<string>(LANGUAGES.map((language) => language.code));
+
+export function isLocale(value: unknown): value is Locale {
+  return typeof value === 'string' && SUPPORTED.has(value);
+}
+
+export function readStoredLocale(): Locale | null {
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    return isLocale(stored) ? stored : null;
+  } catch {
+    return null;
+  }
+}
+
+export function detectLocale(): Locale {
+  const candidates =
+    navigator.languages && navigator.languages.length
+      ? navigator.languages
+      : [navigator.language];
+  for (const tag of candidates) {
+    const code = String(tag).toLowerCase().split('-')[0];
+    if (isLocale(code)) return code;
+  }
+  return 'en';
+}
+
+export function getInitialLocale(): Locale {
+  if (isLocale(window.__LANDING_LOCALE__)) return window.__LANDING_LOCALE__;
+  const stored = readStoredLocale();
+  if (stored) return stored;
+  return detectLocale();
+}
+
+export function translate(locale: Locale): Record<CopyKey, string> {
+  return COPY[locale];
+}
+
+declare global {
+  interface Window {
+    /** 由 index.html 内联脚本在首屏前写入，避免中文文案闪烁 */
+    __LANDING_LOCALE__?: string;
+  }
+}

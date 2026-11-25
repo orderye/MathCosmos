@@ -4,7 +4,7 @@
  * - CPU 更新预算用 200 次批量均摊，避免 headless 单帧计时分辨率噪声。
  * 用法：先 npm run dev，再 npm run verify:perf
  */
-const baseUrl = process.env.COSMOS_URL || 'http://localhost:5173/';
+const baseUrl = process.env.COSMOS_URL || 'http://localhost:5173/app.html';
 const task = await taskSpace('cosmos-perf-audit');
 const page = (await task.pages())[0] ?? (await task.newPage());
 
@@ -53,7 +53,7 @@ console.log(JSON.stringify(result, null, 2));
 
 if (!result.hasPerf || !result.perf) throw new Error('window.__PERF__ 未初始化');
 if (result.errors.length) throw new Error('运行时错误：' + result.errors.join(' | '));
-if (result.ready !== 114) throw new Error('实体未全部就绪：' + result.ready);
+if (result.ready !== 120) throw new Error('实体未全部就绪：' + result.ready);
 if (result.initMs > 30000) throw new Error('初始化墙钟超时：' + result.initMs + 'ms');
 if (result.initCpuMs > 4000) {
   throw new Error('初始化 CPU 超预算：' + result.initCpuMs + 'ms');

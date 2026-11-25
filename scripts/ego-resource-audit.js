@@ -1,9 +1,9 @@
 /**
- * Phase 4 资源释放审计：移除并 dispose 全部 114 个实体，
+ * Phase 4 资源释放审计：移除并 dispose 全部 120 个实体，
  * 断言 ResourceTracker 清空、GPU 几何/纹理回落到场景基线、0 错误。
  * 用法：先 npm run dev，再 npm run verify:resources
  */
-const baseUrl = process.env.COSMOS_URL || 'http://localhost:5173/';
+const baseUrl = process.env.COSMOS_URL || 'http://localhost:5173/app.html';
 const task = await taskSpace('cosmos-resource-audit');
 const page = (await task.pages())[0] ?? (await task.newPage());
 
@@ -65,7 +65,7 @@ const after = await page.evaluate(() => {
 
 console.log(JSON.stringify({ before, disposed, after }, null, 2));
 
-if (before.ready !== 114) throw new Error('实体未全部就绪：' + before.ready);
+if (before.ready !== 120) throw new Error('实体未全部就绪：' + before.ready);
 if (before.resourcesMissing !== 0) throw new Error('资源登记缺失：' + before.resourcesMissing);
 if (disposed.leftovers !== 0) throw new Error('dispose 后仍有登记资源：' + disposed.leftovers);
 if (after.errors.length) throw new Error('释放后运行时错误：' + after.errors.join(' | '));
