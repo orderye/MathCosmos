@@ -52,13 +52,21 @@ def main() -> int:
         diff = ImageChops.difference(base_img, cur_img)
         mean = sum(ImageStat.Stat(diff).mean) / 3
         changed = changed_ratio(diff, args.pixel_threshold)
-        ok = mean <= args.mean_threshold and changed <= args.changed_threshold
+        base_lum = sum(ImageStat.Stat(base_img).mean) / 3
+        cur_lum = sum(ImageStat.Stat(cur_img).mean) / 3
+        tolerance = entry.get("tolerance", {})
+        mean_limit = tolerance.get("mean", args.mean_threshold)
+        changed_limit = tolerance.get("changed", args.changed_threshold)
+        blank = cur_lum < 0.25 and base_lum > 2.0
+        ok = (not blank) and mean <= mean_limit and changed <= changed_limit
         print(
             f"{entry['code']:>4} {entry['type']:<24} "
-            f"mean={mean:6.2f} changed={changed * 100:5.1f}% {'OK' if ok else 'FAIL'}"
+            f"mean={mean:6.2f} changed={changed * 100:5.1f}% "
+            f"lum={cur_lum:5.1f} {'OK' if ok else 'FAIL'}"
         )
         if not ok:
-            failures.append((entry["code"], entry["type"], f"mean={mean:.2f} changed={changed:.2%}"))
+            reason = "blank" if blank else f"mean={mean:.2f} changed={changed:.2%}"
+            failures.append((entry["code"], entry["type"], reason))
 
     print(f"\n{len(manifest['entries']) - len(failures)}/{len(manifest['entries'])} passed")
     if failures:

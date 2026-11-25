@@ -85,12 +85,12 @@ npm run verify:perf      # 批量 CPU / DrawCall / 三角形
 ## 7. 视觉基线
 
 ```bash
-npm run capture:visual   # 生成 tests/visual-baseline/*.png
-VISUAL_DIR=tests/visual-current npm run capture:visual
-npm run compare:visual   # 与基线做像素差分
+npm run capture:visual   # 生成 tests/visual-current/*.png
+npm run compare:visual   # 当前 vs tests/visual-baseline
+npm run update:visual    # 确认后显式更新基线
 ```
 
-单模型截图会隐藏 HUD、图鉴、跃迁索引、callout 与巨兽，只保留目标模型。
+单模型截图会隐藏 HUD、图鉴、跃迁索引、callout 与巨兽，只保留目标模型；捕获时冻结轨道、等待首次 LOD0 着色器编译，并对点云/线框做截图专用增强。
 
 ## 8. 与原始文档的偏差
 

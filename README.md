@@ -58,7 +58,8 @@ npm run dev
 | `npm run verify:ego` | 场景冒烟门禁（需 dev server + ego-browser） |
 | `npm run verify:resources` | 资源释放审计（需 dev server + ego-browser） |
 | `npm run verify:perf` | 性能门禁（需 dev server + ego-browser） |
-| `npm run capture:visual` | 生成 40 类视觉截图（默认写入基线目录，见下） |
+| `npm run capture:visual` | 生成 40 类当前截图到 `tests/visual-current`（需 dev server） |
+| `npm run update:visual` | 显式更新 `tests/visual-baseline` |
 | `npm run compare:visual` | 对比当前截图与视觉基线（需 python3 + Pillow） |
 
 ## 规模
@@ -136,14 +137,14 @@ npm run verify:perf
 
 地址可用 `COSMOS_URL` 覆盖，例如 `COSMOS_URL=http://localhost:4173/ npm run verify:ego`。冒烟脚本通过 `window.__COSMOS__` 读取场景状态，改动系统注册表或壳层分配时需同步更新期望值。
 
-视觉回归：`npm run capture:visual` **默认直接覆写 `tests/visual-baseline/`**，若要对比需显式指定输出目录：
+视觉回归：默认只写当前截图，避免静默覆写基准。
 
 ```bash
-VISUAL_DIR=tests/visual-current npm run capture:visual
-npm run compare:visual
+npm run capture:visual   # 写入 tests/visual-current
+npm run compare:visual   # 当前 vs tests/visual-baseline
 ```
 
-对比脚本要求 40 张截图与 `manifest.json` 齐全并逐张过阈值，缺失或超阈值即失败。确认画面变更符合预期后，再不带 `VISUAL_DIR` 重跑一次以更新基线。
+对比脚本要求 40 张截图与 `manifest.json` 齐全并逐张过阈值，缺失或超阈值即失败。确认画面变更符合预期后，才显式执行 `npm run update:visual` 更新基线。
 
 ## 文档
 

@@ -19,6 +19,7 @@ export class CreatureSystem implements CosmosSystem {
   private totalCount = 0;
   private startedAtMs = 0;
   private completedAtMs = 0;
+  private initCpu = 0;
 
   constructor(private readonly options: CreatureSystemOptions = {}) {}
 
@@ -30,9 +31,13 @@ export class CreatureSystem implements CosmosSystem {
     return Math.max(0, this.totalCount - this.loadedCount);
   }
 
-  get initDurationMs(): number {
+  get initMs(): number {
     if (!this.startedAtMs) return 0;
     return (this.completedAtMs || performance.now()) - this.startedAtMs;
+  }
+
+  get initCpuMs(): number {
+    return Math.round(this.initCpu);
   }
 
   update(ctx: WorldContext, delta: number, elapsed: number): void {
@@ -52,7 +57,9 @@ export class CreatureSystem implements CosmosSystem {
         count < batch &&
         (count === 0 || performance.now() - start < maxMs)
       ) {
+        const initStart = performance.now();
         creatures[this.cursor++].initialize();
+        this.initCpu += performance.now() - initStart;
         count++;
       }
       this.firstFrame = false;

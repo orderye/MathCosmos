@@ -1,0 +1,56 @@
+{
+  "capturedAt": "2026-11-25",
+  "phase": "Phase 6 测试分层与文档收尾",
+  "docs": [
+    "README.md",
+    "ARCHITECTURE.md",
+    "Docs/IMPLEMENTATION_STATUS.md"
+  ],
+  "tests": {
+    "vitestFiles": 9,
+    "vitestCases": 38,
+    "layers": {
+      "L0": "纯数学公式",
+      "L1": "ResourceTracker / CreatureSystem / Flight / PerformanceProbe",
+      "L2": "CreatureFactory 114 实例 + 40 类注册表",
+      "L3": "EGO 场景/资源/性能/视觉"
+    }
+  },
+  "visualBaseline": {
+    "count": 40,
+    "dir": "tests/visual-baseline",
+    "sizeBytes": 11534336,
+    "manifest": "tests/visual-baseline/manifest.json",
+    "capture": "npm run capture:visual（写 tests/visual-current，已 gitignore）",
+    "update": "npm run update:visual（哨兵文件切到基线目录，显式更新）",
+    "compare": "npm run compare:visual（40/40 passed）",
+    "isolation": "隐藏 HUD/图鉴/跃迁索引/callout/巨兽/其他模型；冻结轨道；等待首次 LOD0 编译 2s；点云放大增亮、线框增亮",
+    "animatedTolerance": {
+      "hopf/fourier/harmonics": "mean 70 / changed 0.6",
+      "kuramoto": "mean 80 / changed 0.9",
+      "blankGuard": "current mean luminance < 0.25 且 baseline > 2 判 FAIL"
+    }
+  },
+  "build": {
+    "entryBytes": 189850,
+    "totalJsBytes": 1022566,
+    "entryBudgetBytes": 700000,
+    "totalBudgetBytes": 1250000
+  },
+  "runtime": {
+    "creatures": 114,
+    "ready": 114,
+    "initCpuMs": 913,
+    "initWallMsHeadless": 23906,
+    "errors": 0,
+    "warpState": "ORBIT_LOCK",
+    "resourceLeftovers": 0,
+    "geometries": { "before": 130, "after": 10 },
+    "textures": { "before": 20, "after": 18 }
+  },
+  "notes": [
+    "headless 后台 rAF 会降频，初始化墙钟只作观测；门禁使用 initCpuMs",
+    "视觉脚本默认写 current，update:visual 才写 baseline，避免基线自比假绿",
+    "ESLint/Prettier 尚未接入，避免在并行会话在途文件上做全仓格式化"
+  ]
+}

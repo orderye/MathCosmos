@@ -5,7 +5,7 @@
  */
 const baseUrl = process.env.COSMOS_URL || 'http://localhost:5173/';
 const task = await taskSpace('cosmos-resource-audit');
-const page = task.page('p1');
+const page = (await task.pages())[0] ?? (await task.newPage());
 
 await page.cdp('Page.addScriptToEvaluateOnNewDocument', {
   source: `window.__ERR__ = [];
@@ -20,7 +20,12 @@ await page.cdp('Page.addScriptToEvaluateOnNewDocument', {
 });
 
 await page.goto(baseUrl + '?t=' + Date.now(), { timeout: 60000 });
-await page.waitForTimeout(18000);
+await page.waitForTimeout(2000);
+for (let i = 0; i < 200; i++) {
+  const done = await page.evaluate(() => window.__COSMOS__?.creatureSystem?.remaining === 0);
+  if (done) break;
+  await page.waitForTimeout(300);
+}
 
 const before = await page.evaluate(() => {
   const c = window.__COSMOS__;
@@ -70,3 +75,4 @@ if (after.memory.geometries >= before.memory.geometries * 0.5) {
 if (after.memory.textures > before.memory.textures) {
   throw new Error('纹理内存增长：' + before.memory.textures + ' → ' + after.memory.textures);
 }
+await page.close();

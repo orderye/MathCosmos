@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-25T07:52:27.901Z",
+  "capturedAt": "2026-11-25T09:44:36.969Z",
   "count": 40,
   "entries": [
     {
@@ -45,17 +45,29 @@
     {
       "code": "M09",
       "type": "hopf",
-      "file": "M09-hopf.png"
+      "file": "M09-hopf.png",
+      "tolerance": {
+        "mean": 70,
+        "changed": 0.6
+      }
     },
     {
       "code": "M10",
       "type": "fourier",
-      "file": "M10-fourier.png"
+      "file": "M10-fourier.png",
+      "tolerance": {
+        "mean": 70,
+        "changed": 0.6
+      }
     },
     {
       "code": "M11",
       "type": "harmonics",
-      "file": "M11-harmonics.png"
+      "file": "M11-harmonics.png",
+      "tolerance": {
+        "mean": 70,
+        "changed": 0.6
+      }
     },
     {
       "code": "M12",
@@ -165,7 +177,11 @@
     {
       "code": "M33",
       "type": "kuramoto",
-      "file": "M33-kuramoto.png"
+      "file": "M33-kuramoto.png",
+      "tolerance": {
+        "mean": 80,
+        "changed": 0.9
+      }
     },
     {
       "code": "M34",

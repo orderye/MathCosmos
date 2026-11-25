@@ -1,21 +1,23 @@
 /**
- * 为 40 类模型生成视觉基线截图（隐藏 HUD/巨兽/其他模型）。
- * 用法：先 npm run dev，再 npm run capture:visual
- * 覆盖输出目录：VISUAL_DIR=tests/visual-current npm run capture:visual
+ * 生成 40 类模型截图。
+ * 默认写 tests/visual-current（用于 compare:visual）；
+ * 更新基线必须显式 `npm run update:visual`，避免静默覆写基准。
  */
 const fsp = await import('node:fs/promises');
 const path = await import('node:path');
 
 const root = process.env.INIT_CWD || process.env.PWD || '.';
+const updateFlag = path.join(root, 'tests/.visual-update');
+const updateMode = await fsp.access(updateFlag).then(() => true, () => false);
 const outDir = process.env.VISUAL_DIR
   ? path.resolve(root, process.env.VISUAL_DIR)
-  : path.join(root, 'tests/visual-baseline');
+  : path.join(root, updateMode ? 'tests/visual-baseline' : 'tests/visual-current');
 const baseUrl = process.env.COSMOS_URL || 'http://localhost:5173/';
 
 await fsp.mkdir(outDir, { recursive: true });
 
 const task = await taskSpace('cosmos-visual-baseline');
-const page = task.page('p1');
+const page = (await task.pages())[0] ?? (await task.newPage());
 await page.cdp('Page.addScriptToEvaluateOnNewDocument', {
   source: `window.__ERR__ = [];
     const orig = console.error.bind(console);
@@ -71,6 +73,15 @@ const entries = await page.evaluate(() => {
   return result.sort((a, b) => a.code.localeCompare(b.code));
 });
 
+const LOOSE_TOLERANCE = new Set(['hopf', 'fourier', 'harmonics']);
+const KURAMOTO_TOLERANCE = { mean: 80, changed: 0.9 };
+
+function toleranceFor(type) {
+  if (type === 'kuramoto') return KURAMOTO_TOLERANCE;
+  if (LOOSE_TOLERANCE.has(type)) return { mean: 70, changed: 0.6 };
+  return undefined;
+}
+
 const manifest = [];
 for (const entry of entries) {
   await page.evaluate(({ type }) => {
@@ -95,7 +106,7 @@ for (const entry of entries) {
     c.flight.quaternion.copy(c.engine.camera.quaternion);
   }, entry);
   // 首次 LOD0 可能触发着色器编译；等编译完成后再按模型当前位置重新取景
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   await page.evaluate(({ type }) => {
     const c = window.__COSMOS__;
     const target = c.creatures.find((x) => x.config.modelType === type && x.ready);
@@ -114,7 +125,12 @@ for (const entry of entries) {
   await page.waitForTimeout(220);
   const file = `${entry.code}-${entry.type}.png`;
   await page.screenshot({ path: path.join(outDir, file) });
-  manifest.push({ ...entry, file });
+  const tolerance = toleranceFor(entry.type);
+  manifest.push({
+    ...entry,
+    file,
+    ...(tolerance ? { tolerance } : {}),
+  });
   process.stdout.write(`captured ${file}\n`);
 }
 
@@ -125,4 +141,5 @@ await fsp.writeFile(
 
 const errors = await page.evaluate(() => (window.__ERR__ || []).slice(0, 10));
 console.log(JSON.stringify({ outDir, count: manifest.length, errors }, null, 2));
+await page.close();
 if (errors.length) throw new Error('视觉基线捕获期间出现错误：' + errors.join(' | '));

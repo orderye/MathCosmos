@@ -14,7 +14,8 @@
     "verify:ego": "ego-browser nodejs < scripts/ego-smoke.js",
     "verify:resources": "ego-browser nodejs < scripts/ego-resource-audit.js",
     "verify:perf": "ego-browser nodejs < scripts/ego-perf-audit.js",
-    "capture:visual": "ego-browser nodejs < scripts/ego-visual-baseline.js",
+    "capture:visual": "bash -c 'rm -f tests/.visual-update; ego-browser nodejs < scripts/ego-visual-baseline.js'",
+    "update:visual": "bash -c 'trap \"rm -f tests/.visual-update\" EXIT; touch tests/.visual-update; ego-browser nodejs < scripts/ego-visual-baseline.js'",
     "compare:visual": "python3 scripts/compare-visual-baseline.py"
   },
   "dependencies": {

@@ -109,4 +109,4 @@ requestAnimationFrame
 2. 在 `src/entities/models/` 实现类并继承对应基底。
 3. 在 `src/entities/modelConstructors.ts` 注册构造器。
 4. 跑 `npm run ci`、`npm run verify:ego`、`npm run verify:perf`。
-5. 若新增视觉，更新 `npm run capture:visual` 基线。
+5. 若新增视觉，先 `npm run capture:visual` + `npm run compare:visual`，确认后 `npm run update:visual`。
