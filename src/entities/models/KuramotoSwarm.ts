@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { BaseMathCreature } from '../BaseMathCreature';
+import { createSeededRandom } from '../../core/CelestialOrbitEngine';
 import { createShaderMaterial } from './base/CreatureMaterialFactory';
 import { fibonacciSphere } from './base/geometry';
 import { kuramotoStep } from '../../core/math/kuramoto';
@@ -19,12 +20,13 @@ export class KuramotoSwarm extends BaseMathCreature {
   public init(): void {
     const dirs = fibonacciSphere(NODES);
     const pos = new Float32Array(NODES * 3);
+    const rnd = createSeededRandom(Math.floor(this.config.orbit.seed * 0xffffffff));
     for (let i = 0; i < NODES; i++) {
       pos[i * 3] = dirs[i].x;
       pos[i * 3 + 1] = dirs[i].y;
       pos[i * 3 + 2] = dirs[i].z;
-      this.phases[i] = Math.random() * Math.PI * 2;
-      this.omegas[i] = (Math.random() - 0.5) * 0.7;
+      this.phases[i] = rnd() * Math.PI * 2;
+      this.omegas[i] = (rnd() - 0.5) * 0.7;
     }
     this.geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     this.phaseAttr = new THREE.BufferAttribute(this.phases, 1);
