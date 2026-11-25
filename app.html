@@ -30,6 +30,7 @@
         left: 24px;
         bottom: 20px;
         z-index: 2;
+        max-width: calc(100vw - 48px);
         font: 11px/1.7 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
         color: rgba(216, 180, 254, 0.75);
         text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
@@ -39,6 +40,7 @@
       }
       #hud .hint {
         color: rgba(148, 163, 184, 0.55);
+        white-space: normal;
       }
       #crosshair {
         position: fixed;
@@ -191,6 +193,127 @@
         letter-spacing: 0.12em;
         pointer-events: none;
       }
+      #app-lang {
+        position: fixed;
+        top: 14px;
+        right: 18px;
+        z-index: 8;
+        font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      .app-lang-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        color: #e9e2f7;
+        border: 1px solid rgba(216, 180, 254, 0.22);
+        border-radius: 3px;
+        background: rgba(12, 10, 20, 0.78);
+        backdrop-filter: blur(8px);
+        font: inherit;
+        cursor: pointer;
+        transition: border-color 160ms, background 160ms;
+      }
+      .app-lang-toggle:hover,
+      #app-lang.open .app-lang-toggle {
+        border-color: rgba(216, 180, 254, 0.65);
+        background: rgba(45, 30, 65, 0.88);
+      }
+      .app-lang-toggle svg {
+        width: 13px;
+        height: 13px;
+        opacity: 0.75;
+      }
+      .app-lang-code {
+        display: none;
+        color: rgba(148, 163, 184, 0.7);
+        font-size: 9px;
+        letter-spacing: 0.08em;
+      }
+      .app-lang-chevron {
+        color: rgba(148, 163, 184, 0.6);
+        font-size: 9px;
+        transition: transform 160ms;
+      }
+      #app-lang.open .app-lang-chevron {
+        transform: rotate(180deg);
+      }
+      .app-lang-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        width: 190px;
+        padding: 6px;
+        border: 1px solid rgba(216, 180, 254, 0.2);
+        border-radius: 4px;
+        background: rgba(7, 6, 12, 0.94);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(12px);
+        opacity: 0;
+        transform: translateY(-4px);
+        pointer-events: none;
+        transition: opacity 160ms, transform 160ms;
+      }
+      #app-lang.open .app-lang-menu {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+      .app-lang-menu button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 7px 8px;
+        border: 0;
+        border-radius: 2px;
+        background: none;
+        color: #e9e2f7;
+        font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-align: left;
+        cursor: pointer;
+      }
+      .app-lang-menu button:hover {
+        background: rgba(168, 85, 247, 0.16);
+      }
+      .app-lang-menu button[aria-selected='true'] {
+        color: #f3e8ff;
+        background: rgba(168, 85, 247, 0.24);
+      }
+      .app-lang-menu small {
+        color: rgba(148, 163, 184, 0.72);
+        font-size: 9px;
+        letter-spacing: 0.08em;
+      }
+      .app-lang-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 7;
+        pointer-events: none;
+      }
+      .app-lang-backdrop.show {
+        pointer-events: auto;
+      }
+      @media (max-width: 560px) {
+        #hud {
+          bottom: 132px;
+        }
+        #app-lang {
+          top: 10px;
+          right: 12px;
+        }
+        .app-lang-name {
+          display: none;
+        }
+        .app-lang-code {
+          display: inline;
+        }
+      }
+      @media (min-width: 561px) {
+        #hud {
+          max-width: calc(100vw - 358px);
+        }
+      }
     </style>
   </head>
   <body>
@@ -198,6 +321,7 @@
     <div id="hud"></div>
     <div id="crosshair"></div>
     <div id="flight-status">FREE FLIGHT</div>
+    <div id="app-lang"></div>
     <div id="warp-selector"></div>
     <aside id="codex-drawer" aria-hidden="true"></aside>
     <script type="module" src="/src/main.ts"></script>

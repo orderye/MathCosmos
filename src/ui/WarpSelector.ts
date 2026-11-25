@@ -1,4 +1,6 @@
 import { MODEL_ORDER, type CodexEntry, type OrbitShell } from '../data/mathCodexData';
+import { appCopy, shellLabel } from '../i18n/appCopy';
+import type { Locale } from '../i18n/locale';
 
 export interface WarpSelectorHandlers {
   onWarpRiemann: () => void;
@@ -6,52 +8,96 @@ export interface WarpSelectorHandlers {
   onToggleAudio: () => void;
 }
 
-const SHELL_LABELS: Record<OrbitShell, string> = {
-  inner: '内环 · 数论 / 量子朝圣带',
-  main: '中环 · 混沌 / 拓扑洋流带',
-  outer: '外环 · 分形 / 深空边疆带',
-};
+const SHELLS: OrbitShell[] = ['inner', 'main', 'outer'];
 
 export class WarpSelector {
-  constructor(root: HTMLElement, handlers: WarpSelectorHandlers) {
+  private readonly root: HTMLElement;
+  private readonly list: HTMLElement;
+  private readonly toggle: HTMLButtonElement;
+  private locale: Locale;
+  private audioEnabled = false;
+
+  constructor(root: HTMLElement, handlers: WarpSelectorHandlers, locale: Locale) {
+    this.root = root;
+    this.locale = locale;
+
+    const copy = appCopy(locale);
     root.innerHTML = `
-      <button id="warp-riemann" class="warp-riemann">✦ 跃迁至黎曼猜想巨构</button>
+      <button id="warp-riemann" class="warp-riemann">${copy.warpRiemann}</button>
       <div class="warp-row">
-        <button id="warp-toggle" class="secondary-button">数学模型索引 ▾</button>
-        <button id="audio-toggle" class="secondary-button">开启宇宙音效</button>
+        <button id="warp-toggle" class="secondary-button">${copy.warpIndex}</button>
+        <button id="audio-toggle" class="secondary-button">${copy.audioEnable}</button>
       </div>
       <div id="warp-list" class="warp-list" hidden></div>`;
 
     root.querySelector('#warp-riemann')!.addEventListener('click', handlers.onWarpRiemann);
     root.querySelector('#audio-toggle')!.addEventListener('click', handlers.onToggleAudio);
-    const list = root.querySelector('#warp-list') as HTMLElement;
-    const toggle = root.querySelector('#warp-toggle')!;
-    toggle.addEventListener('click', () => {
-      list.hidden = !list.hidden;
-      toggle.textContent = list.hidden ? '数学模型索引 ▾' : '数学模型索引 ▴';
+
+    this.list = root.querySelector('#warp-list') as HTMLElement;
+    this.toggle = root.querySelector('#warp-toggle') as HTMLButtonElement;
+    this.toggle.addEventListener('click', () => {
+      this.list.hidden = !this.list.hidden;
+      this.toggle.textContent = this.indexLabel();
     });
 
-    for (const shell of ['inner', 'main', 'outer'] as const) {
-      const label = document.createElement('div');
-      label.className = 'warp-group-label';
-      label.textContent = SHELL_LABELS[shell];
-      list.append(label);
+    this.list.addEventListener('click', (event) => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-model]');
+      const modelType = button?.dataset.model;
+      if (!modelType) return;
+      const entry = MODEL_ORDER.find((candidate) => candidate.modelType === modelType);
+      if (entry) handlers.onWarpCreature(entry);
+    });
 
-      for (const entry of MODEL_ORDER.filter((m) => m.shell === shell)) {
-        const button = document.createElement('button');
-        button.className = 'warp-item';
-        button.style.setProperty('--entity-color', entry.glowColor);
-        button.innerHTML =
-          `<span class="entity-dot"></span><span>${entry.titleZh}</span>` +
-          `<small>${entry.code} · ${entry.titleEn}</small>`;
-        button.addEventListener('click', () => handlers.onWarpCreature(entry));
-        list.append(button);
-      }
-    }
+    this.renderList();
+    this.setAudioLabel(false);
   }
 
-  setAudioLabel(enabled: boolean): void {
-    const button = document.querySelector('#audio-toggle');
-    if (button) button.textContent = enabled ? '静音宇宙音效' : '开启宇宙音效';
+  public setLocale(locale: Locale): void {
+    this.locale = locale;
+    const copy = appCopy(locale);
+    this.root.querySelector('#warp-riemann')!.textContent = copy.warpRiemann;
+    this.toggle.textContent = this.indexLabel();
+    this.renderList();
+    this.setAudioLabel(this.audioEnabled);
+  }
+
+  public setAudioLabel(enabled: boolean): void {
+    this.audioEnabled = enabled;
+    const copy = appCopy(this.locale);
+    const button = this.root.querySelector('#audio-toggle');
+    if (button) button.textContent = enabled ? copy.audioMute : copy.audioEnable;
+  }
+
+  private indexLabel(): string {
+    const copy = appCopy(this.locale);
+    return this.list.hidden ? copy.warpIndex : copy.warpIndexOpen;
+  }
+
+  private renderList(): void {
+    this.list.innerHTML = '';
+    for (const shell of SHELLS) {
+      const label = document.createElement('div');
+      label.className = 'warp-group-label';
+      label.textContent = shellLabel(this.locale, shell);
+      this.list.append(label);
+
+      for (const entry of MODEL_ORDER.filter((model) => model.shell === shell)) {
+        const button = document.createElement('button');
+        button.className = 'warp-item';
+        button.dataset.model = entry.modelType;
+        button.style.setProperty('--entity-color', entry.glowColor);
+
+        const dot = document.createElement('span');
+        dot.className = 'entity-dot';
+        const title = document.createElement('span');
+        title.textContent = this.locale === 'zh' ? entry.titleZh : entry.titleEn;
+        const meta = document.createElement('small');
+        meta.textContent =
+          this.locale === 'zh' ? `${entry.code} · ${entry.titleEn}` : entry.code;
+
+        button.append(dot, title, meta);
+        this.list.append(button);
+      }
+    }
   }
 }

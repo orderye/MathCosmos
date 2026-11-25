@@ -13,6 +13,8 @@ import { CodexDrawer } from '../ui/CodexDrawer';
 import { WarpSelector } from '../ui/WarpSelector';
 import { HudView } from '../ui/HudView';
 import { InputController } from '../ui/InputController';
+import { LanguageControl } from '../ui/LanguageControl';
+import { getInitialLocale, type Locale } from '../i18n/locale';
 import { CosmicAudioEngine } from '../audio/CosmicAudioEngine';
 import type { CodexEntry } from '../data/mathCodexData';
 import type { BaseMathCreature } from '../entities/BaseMathCreature';
@@ -67,6 +69,8 @@ export class CosmosApp {
   private selector!: WarpSelector;
   private hud!: HudView;
   private input!: InputController;
+  private langControl!: LanguageControl;
+  private locale: Locale = getInitialLocale();
   private readonly logicalPos = new THREE.Vector3();
   private readonly resizeCallout: () => void;
   private readonly onPageHide: () => void;
@@ -178,21 +182,31 @@ export class CosmosApp {
   }
 
   private buildUi(): void {
-    this.hud = new HudView(document.getElementById('hud')!, this.bus);
+    this.hud = new HudView(document.getElementById('hud')!, this.bus, this.locale);
     this.drawer = new CodexDrawer(
       document.getElementById('codex-drawer')!,
       (entry) => this.warpToCreature(entry),
       () => this.flight.detach(),
       () => void this.toggleAudio(),
+      this.locale,
     );
-    this.selector = new WarpSelector(document.getElementById('warp-selector')!, {
-      onWarpRiemann: () => {
-        this.flight.warpTo(this.riemannTarget);
-        this.drawer.close();
+    this.selector = new WarpSelector(
+      document.getElementById('warp-selector')!,
+      {
+        onWarpRiemann: () => {
+          this.flight.warpTo(this.riemannTarget);
+          this.drawer.close();
+        },
+        onWarpCreature: (entry) => this.warpToCreature(entry),
+        onToggleAudio: () => void this.toggleAudio(),
       },
-      onWarpCreature: (entry) => this.warpToCreature(entry),
-      onToggleAudio: () => void this.toggleAudio(),
-    });
+      this.locale,
+    );
+    this.langControl = new LanguageControl(
+      document.getElementById('app-lang')!,
+      this.locale,
+      (locale) => this.applyLocale(locale),
+    );
     this.input = new InputController({
       canvas: this.engine.renderer.domElement,
       camera: this.engine.camera,
@@ -201,6 +215,14 @@ export class CosmosApp {
       drawer: this.drawer,
       onFirstInteraction: () => void this.unlockAudio(),
     });
+  }
+
+  private applyLocale(locale: Locale): void {
+    this.locale = locale;
+    this.hud.setLocale(locale);
+    this.drawer.setLocale(locale);
+    this.selector.setLocale(locale);
+    this.langControl.setLocale(locale);
   }
 
   private nearestCreature(entry: CodexEntry): BaseMathCreature {
@@ -252,8 +274,7 @@ export class CosmosApp {
   private async toggleAudio(): Promise<void> {
     const enabled = await this.audio.toggle();
     this.selector.setAudioLabel(enabled);
-    const codexAudio = document.querySelector('#codex-audio');
-    if (codexAudio) codexAudio.textContent = enabled ? '静音宇宙音效' : '开启宇宙音效';
+    this.drawer.setAudioLabel(enabled);
   }
 
   private async unlockAudio(): Promise<void> {
@@ -261,8 +282,7 @@ export class CosmosApp {
     this.audioUnlocked = true;
     await this.audio.unlock();
     this.selector.setAudioLabel(true);
-    const codexAudio = document.querySelector('#codex-audio');
-    if (codexAudio) codexAudio.textContent = '静音宇宙音效';
+    this.drawer.setAudioLabel(true);
   }
 
   dispose(): void {

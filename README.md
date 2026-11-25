@@ -4,7 +4,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 
-**40 类数学模型、114 个实体、1 座黎曼猜想巨构，装进一个可 6DoF 飞行的 WebGL 宇宙。**
+**40 类数学模型、120 个实体、1 座黎曼猜想巨构，装进一个可 6DoF 飞行的 WebGL 宇宙。**
 
 Lorenz 吸引子、Calabi–Yau 流形、Mandelbulb、E8 根系、Zeta 零点螺旋……每类模型都按自身数学结构驱动几何与着色器；各实体沿开普勒轨道自主巡游，拥有独立的游荡与对玩家的好奇/恐惧反应；音效、相机、巨兽与星尘全部实时程序化生成，不使用预渲染动画。单击任意模型即可展开公式图鉴。
 
@@ -33,6 +33,10 @@ npm run dev
 站点根 `/` 是 Apple 风格的单页入口：首屏正中央实时渲染 M35 黎曼 ζ 临界带曲面（复用主程序的几何与着色器），点击任意位置即可跃迁进入 `app.html` 主体验。生产构建产出 `dist/index.html`（宣传页）与 `dist/app.html`（主程序），两者共享 three 分包，入口脚本体积分别受 `check:bundle` 预算约束。
 
 宣传页支持中文 / English / 日本語 / 한국어 / Deutsch / Français / Русский 七种语言：首次访问按系统语言自动选择（不支持的语言回退英文），也可用导航右侧的地球按钮手动切换；手动选择会写入 `localStorage`，之后优先于系统语言。
+
+### 多语言
+
+宣传主页与 `app.html` 主体验共享同一语言选择：主体验右上角同样有地球按钮，可实时切换 HUD、跃迁菜单、图鉴分类与 40 条模型描述；模型名称保留国际通用英文名。语言选择通过 `localStorage: math-cosmos-locale` 在两个入口间延续，部署后可直接把宣传页的语言带入宇宙。
 
 ## 操作
 
@@ -70,8 +74,9 @@ npm run dev
 
 ## 规模
 
-- **40 类模型，114 个实体**，编号覆盖 M01–M40。
-- **三环壳层**：内环 31 / 中环 65 / 外环 18。
+- **40 类模型，120 个实体**（每类 3 个槽位循环），编号覆盖 M01–M40。
+- **三环壳层**：内环 30 / 中环 63 / 外环 27。
+- 每个实体按“诞生—公转外飞—消散—重生”循环，同类 3 个槽位错相位。
 - 每类模型具备 LOD0 / LOD1 / LOD2 三级；实体随距离自动换级，分帧延迟初始化。
 - 分类枚举：`number-theory / chaos / topology / fractal / analysis / physics / high-dim / pde`。
 - 音频按 `audioFamily`（`chaos / topology / high-dim / fractal / quantum`）选择音色，与视觉分类解耦。
@@ -136,7 +141,7 @@ Docs/                   三卷图鉴、数据结构规范、行为层与音频�
 
 ```bash
 npm run dev            # 另一个终端
-npm run verify:ego     # 114 个体 / 40 类 / M01–M40 / 三环 31-65-18 / LOD / DrawCall / 三角形 / 系统数 / 0 错误
+npm run verify:ego     # 120 个体 / 40 类 / M01–M40 / 三环 30-63-27 / LOD / DrawCall / 三角形 / 系统数 / 0 错误
 npm run verify:resources
 npm run verify:perf
 ```
